@@ -3,13 +3,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     include('database.php');
     
     $db = new Database();
-    $result = $db->execute_query("SELECT UTENTI.NOME, UTENTI.COGNOME, UTENTI.TELEFONO, UTENTI.EMAIL, UTENTI.CODICE_FISCALE, RUOLI.DESCRIZIONE AS RUOLO FROM UTENTI INNER JOIN RUOLI ON UTENTI.ID_RUOLO = RUOLI.ID WHERE EMAIL = '" . $_POST['email'] . "' AND PASSWORD = '" . hash('sha256', $_POST['password']) . "' LIMIT 1");
+    $result = $db->execute_query("SELECT UTENTI.ID, UTENTI.NOME, UTENTI.COGNOME, UTENTI.TELEFONO, UTENTI.EMAIL, UTENTI.CODICE_FISCALE, RUOLI.DESCRIZIONE AS RUOLO FROM UTENTI INNER JOIN RUOLI ON UTENTI.ID_RUOLO = RUOLI.ID WHERE EMAIL = '" . $_POST['email'] . "' AND PASSWORD = '" . hash('sha256', $_POST['password']) . "' LIMIT 1");
     
-    // NEL FRATTEMPO FINTO CONTROLLO
     if ($result->num_rows === 1){
         session_start();
         $_SESSION['user'] = $result->fetch_assoc();
-    }else{
+        $db->execute_query("INSERT INTO ACCESSI_UTENTE(ID_UTENTE) VALUES (" . $_SESSION['user']['ID'] . ")");
+    }
+    else{
         $errorLogin = "Nome utente o password errati";     
     }
     //

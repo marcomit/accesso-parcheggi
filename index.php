@@ -439,22 +439,33 @@ if (!$logged){
                     <?php
                     if(!isset($_GET['page_id'])) {
                         include('pages/index.php');
+                        exit;
                     }
                     else{
-                        switch($_GET['page_id']) {
+                        /*switch($_GET['page_id']) {
                             case 1:
-                                include('pages/pagina_02.php');
+                                include('pages/utenti.php');
                                 break;
                             case 2:
-                                include('pages/pagina_02.php');
+                                include('pages/autorizzazioni.php');
                                 break;
                             case 3:
-                                include('pages/pagina_02.php');
+                                include('pages/richieste.php');
+                                break;
+                            case 4:
+                                include('pages/personale.php');
+                                break;
+                            case 5:
+                                include('pages/veicoli.php');
+                                break;
+                            case 6:
+                                include('pages/accessi.php');
                                 break;
                             default:
                                 include('pages/index.php');
                                 break;
-                        }
+                        }*/
+                        include('pages/index.php');
                     }
                     
                     ?>
@@ -521,6 +532,7 @@ if (!$logged){
 
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script>
 
 </body>
 

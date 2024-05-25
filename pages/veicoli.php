@@ -1,3 +1,1 @@
-<form method="POST" action="veicoli.php">
-
-</form>
+<h1>Veicoli</h1>

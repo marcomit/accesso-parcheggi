@@ -11,7 +11,9 @@ $richieste_pendenti = $db->execute_query("SELECT COUNT(*) AS C FROM AUTORIZZAZIO
     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 </div>
-
+<script lang="text/javascript">
+    console.log(<?php $_SESSION['user'] ?>);
+</script>
 <!-- Content Row -->
 <div class="row">
 

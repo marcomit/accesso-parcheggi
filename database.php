@@ -9,7 +9,6 @@ class Database
     }
 
     public function execute_query(string $sql){
-        
         $result = $this->conn->query($sql);
         return $result;
     }

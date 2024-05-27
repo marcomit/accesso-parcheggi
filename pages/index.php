@@ -3,7 +3,7 @@ require_once(__DIR__ . '/../database.php');
 $db = new Database();
 $auto_presenti = $db->execute_query("SELECT COUNT(*) AS C FROM ACCESSI_VEICOLO WHERE USCITA IS NULL")->fetch_assoc()['C'];
 $autorizzazioni_attive = $db->execute_query("SELECT COUNT(*) AS C FROM AUTORIZZAZIONI WHERE NOW() BETWEEN INIZIO AND FINE")->fetch_assoc()['C'];
-$richieste_pendenti = $db->execute_query("SELECT COUNT(*) AS C FROM AUTORIZZAZIONI WHERE ID_RICHIESTA IS NULL")->fetch_assoc()['C'];
+$richieste_pendenti = $db->execute_query("SELECT COUNT(*) AS C FROM AUTORIZZAZIONI WHERE STATO_RICHIESTA IS NULL")->fetch_assoc()['C'];
 ?>
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">

@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                                         </form>
                                         <hr>
                                         <div class="text-center">
-                                            <a class="small" href="forgot-password.html">Password Dimenticata</a>
+                                            <a class="small" href="forgot-password.php">Password Dimenticata</a>
                                         </div>
                                         <div class="text-center">
                                             <a class="small" href="register.php">Crea un account</a>

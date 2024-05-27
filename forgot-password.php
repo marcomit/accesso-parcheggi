@@ -32,7 +32,7 @@
                     <div class="card o-hidden border-0 shadow-lg my-4 p-5 w-20">
                         <div class="card-body p-0">
                             <!-- Nested Row within Card Body -->
-                            <div class="my-3 d-none d-xl-flex justify-content-center ">
+                            <div class="my-3 text-center">
                             <img src="img/logo.png" alt="Logo" class="" style="max-width: 120px;">
                             </div>
                             <div class="row">

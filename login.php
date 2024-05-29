@@ -65,27 +65,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                                             <h1 class="h4 text-gray-900 mb-4 font-weight-bold">Gestione Accessi - Accedi</h1>
                                             
                                         </div>
-                                        <?php
-                                        if(!isset($errorLogin)){
-
-                                        }
-                                        else if ($errorLogin !== ''){
-                                        ?>
+                                        <?php if (isset($errorLogin)): ?>
                                         <div class="alert alert-danger" role="alert">
                                             <?= $errorLogin; ?>
                                         </div>
-                                        <?php    
-                                        }else if (isset($_SESSION['user'])){
-                                            ?>
+                                        <?php elseif (isset($_SESSION['user'])): ?>
                                             <div class="alert alert-success" role="alert">
                                                 Autenticazione effettuata...
                                             </div>
                                             <script type="text/javascript">
                                                 setTimeout(() => document.location.href = "index.php", 3);
                                             </script>
-                                            <?php
-                                        }
-                                        ?>
+                                        <?php endif; ?>
                                         <form class="user">
                                             <div class="form-group">
                                                 <input type="email" name="email" class="form-control form-control-user"

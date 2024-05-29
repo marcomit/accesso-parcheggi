@@ -4,6 +4,7 @@ $db = new Database();
 $auto_presenti = $db->execute_query("SELECT COUNT(*) AS C FROM ACCESSI_VEICOLO WHERE USCITA IS NULL")->fetch_assoc()['C'];
 $autorizzazioni_attive = $db->execute_query("SELECT COUNT(*) AS C FROM AUTORIZZAZIONI WHERE NOW() BETWEEN INIZIO AND FINE")->fetch_assoc()['C'];
 $richieste_pendenti = $db->execute_query("SELECT COUNT(*) AS C FROM AUTORIZZAZIONI WHERE STATO_RICHIESTA IS NULL")->fetch_assoc()['C'];
+$posti_occupati = $db->execute_query("SELECT COUNT(*) AS C FROM ACCESSI_VEICOLO WHERE USCITA IS NULL")->fetch_assoc()['C'];
 ?>
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -11,9 +12,7 @@ $richieste_pendenti = $db->execute_query("SELECT COUNT(*) AS C FROM AUTORIZZAZIO
     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 </div>
-<script lang="text/javascript">
-    console.log(<?php $_SESSION['user'] ?>);
-</script>
+
 <!-- Content Row -->
 <div class="row">
 
@@ -63,7 +62,7 @@ $richieste_pendenti = $db->execute_query("SELECT COUNT(*) AS C FROM AUTORIZZAZIO
                         </div>
                         <div class="row no-gutters align-items-center">
                             <div class="col-auto">
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?= $posti_occupati ?></div>
                             </div>
                             <div class="col">
                                 <div class="progress progress-sm mr-2">
@@ -89,7 +88,7 @@ $richieste_pendenti = $db->execute_query("SELECT COUNT(*) AS C FROM AUTORIZZAZIO
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Richieste autorizzazione pendenti</div>
+                            Autorizzazione pendenti</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $richieste_pendenti ?></div>
                     </div>
                     <div class="col-auto">

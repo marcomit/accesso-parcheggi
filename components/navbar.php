@@ -3,46 +3,42 @@ $items = [
     [
         "name" => "Dashboard",
         "icon" => "fas fa-fw fa-tachometer-alt",
-        "page_id" => 0
     ],
     [
-        "name" => "Gestione utenti",
-        "icon" => "fa fa-user",
-        "page_id" => 1
+        "name" => "Utenti",
+        "icon" => "fa fa-user"
     ],
     [
-        "name" => "Gestione autorizzazioni",
+        "name" => "Autorizzazioni",
         "icon" => "fas fa-fw fa-tachometer-alt",
-        "page_id" => 3,
         "sub_items" => [
-            ["page_id" => 2, "name" => "Autorizzazioni"],
-            ["page_id" => 3, "name" => "Richieste"],
+            ["name" => "Autorizzazioni"],
+            ["name" => "Richieste"],
         ]
     ],
     [
-        "name" => "Gestione personale",
-        "icon" => "fa fa-id-badge",
-        "page_id" => 4
+        "name" => "Personale",
+        "icon" => "fa fa-id-badge"
     ],
     [
-        "name" => "Gestione veicoli",
-        "icon" => "fa fa-car",
-        "page_id" => 5
+        "name" => "Veicoli",
+        "icon" => "fa fa-car"
     ],
     [
-        "name" => "Gestione accessi",
-        "icon" => "fa fa-car",
-        "page_id" => 6
+        "name" => "Accessi",
+        "icon" => "fa fa-car"
     ],
 ];
 
 $page_id = isset($_GET['page_id']) ? $_GET['page_id'] : 0;
+$current_idx = 0
+
 ?>
 
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
-        <div class="sidebar-brand-icon rotate-n-15">
+        <div class="sidebar-brand-icon">
             <img src="https://www.ittvt.edu.it/wp-content/uploads/cropped-LOGO-SITO-ITT.png" />
         </div>
         <div class="sidebar-brand-text mx-3">Gestione accessi</div>
@@ -53,35 +49,30 @@ $page_id = isset($_GET['page_id']) ? $_GET['page_id'] : 0;
 
     <?php for($item = 0; $item < count($items); $item++): ?>
 
-        <li class="nav-item <?= $items[$item]['page_id'] === $page_id ? 'active' : '' ?>">
-            <?php if(isset($items[$item]["sub_items"])): ?>
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse1"
-                    aria-expanded="true" aria-controls="collapse1">
+        <?php if(isset($items[$item]["sub_items"])): ?>
+            <li class="nav-item <?= $page_id >= $current_idx && $page_id <= $current_idx - 1 + count($items[$item]['sub_items']) ? "active" : "" ?>">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse<?= $current_idx ?>"
+                    aria-expanded="true" aria-controls="collapse<?= $current_idx ?>">
                     <i class="<?= $items[$item]["icon"] ?>"></i>
                     <span><?= $items[$item]["name"] ?></span>
                 </a>
-                <div id="collapse1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapse<?= $current_idx ?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <?php foreach($items[$item]["sub_items"] as $sub_item): ?>
-                            <a class="collapse-item" href="index.php?page_id=<?= $sub_item["page_id"] ?>"><?= $sub_item["name"] ?></a>
+                        <?php foreach($items[$item]["sub_items"] as $sub_item): $current_idx++?>
+                            <a class="collapse-item" href="index.php?page_id=<?= $current_idx - 1 ?>"><?= $sub_item["name"] ?></a>
                         <?php endforeach; ?>
                     </div>
                 </div>
-            <?php else: ?>
-                <a class="nav-link" href="index.php?page_id=<?= $items[$item]["page_id"] ?>">
+            </li>
+        <?php else: $current_idx++?>
+            <li class="nav-item <?= $page_id == $current_idx - 1 ? "active" : "" ?>">
+                <a class="nav-link" href="index.php?page_id=<?= $current_idx - 1 ?>">
                     <i class="<?= $items[$item]["icon"] ?>"></i>
                     <span><?= $items[$item]["name"] ?></span>
                 </a>
-            <?php endif; ?>
-        </li>
+            </li>
+        <?php endif; ?>
     <?php endfor; ?>
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="index.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span><?= $page_id ?></span></a>
-    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

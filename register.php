@@ -11,6 +11,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if($password !== $repeat_password){
         echo 'The passwords do not match';
     }
+    
     include('database.php');
 
     $sql = "INSERT INTO UTENTI(NOME, COGNOME, EMAIL, PASSWORD, CODICE_FISCALE, TELEFONO, ID_RUOLO) " .

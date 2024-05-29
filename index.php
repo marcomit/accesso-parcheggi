@@ -283,9 +283,7 @@ if (!$logged){
                                 break;
                         }
                     }
-                    
                     ?>
-
                 </div>
                 <!-- /.container-fluid -->
 

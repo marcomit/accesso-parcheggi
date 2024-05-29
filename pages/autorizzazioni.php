@@ -29,7 +29,7 @@ else{
 </div>
 
 <?php if($autorizzazioni->num_rows == 0): ?>
-    <h2>Non hai richiesto un'autorizzazione</h2>
+    <h2>Non hai richiesto nessuna autorizzazione</h2>
 <?php else: ?>
 <?php while($autorizzazione = $autorizzazioni->fetch_assoc()): ?>
     <div class="col-xl-8 col-lg-7">

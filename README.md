@@ -1,65 +1,64 @@
-# [Start Bootstrap - SB Admin 2](https://startbootstrap.com/theme/sb-admin-2/)
+GESTIONE ACCESSI
+Descrizione dell’architettura
+L’applicativo si basa sulla gestione degli accessi automatizzati e controllati al parcheggio interno dell’istituto.
+In particolare:
 
-[SB Admin 2](https://startbootstrap.com/theme/sb-admin-2/) is an open source admin dashboard theme for [Bootstrap](https://getbootstrap.com/) created by [Start Bootstrap](https://startbootstrap.com/).
+Caratteristiche Utenti
+È stata idealizzata una struttura relativa alla suddivisione degli utenti in Studenti, Personale Interno (docenti e personale ATA) e Esterni. Per ogni ruolo sono definite le direttive relative al permesso di accesso:
+Studenti) i permessi dedicati agli studenti vengono emessi in casi eccezionali.
+Personale Interno) I permessi vengono attivati recepiti e ed autorizzati senza criteri. Alla richiesta viene esplicitata la durata annuale.
+Esterni) Vengono autorizzati permessi giornalieri su richiesta
 
-For the legacy Bootstrap 3 version of this theme, you can view the [last stable release](https://github.com/StartBootstrap/startbootstrap-sb-admin-2/releases/tag/v3.3.7%2B1) of SB Admin 2 for Bootstrap 3.
+Per elaborare le informazioni si è deciso di gestire i permessi con data di inizio e data di fine, senza specifica di orario.
 
-## Preview
+Le autorizzazioni sono uniche per veicolo, ognuno dei tali legati ad un responsabile.
 
-[![SB Admin 2 Preview](https://assets.startbootstrap.com/img/screenshots/themes/sb-admin-2.png)](https://startbootstrap.github.io/startbootstrap-sb-admin-2/)
 
-**[Launch Live Preview](https://startbootstrap.github.io/startbootstrap-sb-admin-2/)**
+Database
+Schema E/R database (proposto)
 
-## Status
+https://app.eraser.io/workspace/OHhKszQkfL0IDRpanIZ1?origin=share
+Schema E/R realizzato in classe
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/StartBootstrap/startbootstrap-sb-admin-2/master/LICENSE)
-[![npm version](https://img.shields.io/npm/v/startbootstrap-sb-admin-2.svg)](https://www.npmjs.com/package/startbootstrap-sb-admin-2)
-[![Build Status](https://travis-ci.org/StartBootstrap/startbootstrap-sb-admin-2.svg?branch=master)](https://travis-ci.org/StartBootstrap/startbootstrap-sb-admin-2)
-[![dependencies Status](https://david-dm.org/StartBootstrap/startbootstrap-sb-admin-2/status.svg)](https://david-dm.org/StartBootstrap/startbootstrap-sb-admin-2)
-[![devDependencies Status](https://david-dm.org/StartBootstrap/startbootstrap-sb-admin-2/dev-status.svg)](https://david-dm.org/StartBootstrap/startbootstrap-sb-admin-2?type=dev)
+https://lucid.app/lucidchart/f45c6f0d-4321-4588-8ef9-d74191b0a6e2/edit?viewport_loc=-697%2C-291%2C3012%2C1413%2C0_0&invitationId=inv_caf93ad6-8fbc-49e9-810b-0168200de62e
+Implementazione su phpmyadmin
+Applicazione
+L’applicativo si compone di varie parti:
+Componente web based per la base di dati e per il portale web Dashboard
+Attrezzatura per il riconoscimento delle targhe veicolo
+Gestione api con OpenCV 
 
-## Download and Installation
+Per l’accesso all’applicazione web non sono necessari terminali particolari, il portale è accessibile da qualunque dispositivo con connessione ad internet
 
-To begin using this template, choose one of the following options to get started:
 
-* [Download the latest release on Start Bootstrap](https://startbootstrap.com/theme/sb-admin-2/)
-* Install via npm: `npm i startbootstrap-sb-admin-2`
-* Clone the repo: `git clone https://github.com/StartBootstrap/startbootstrap-sb-admin-2.git`
-* [Fork, Clone, or Download on GitHub](https://github.com/StartBootstrap/startbootstrap-sb-admin-2)
 
-## Usage
+Requisiti dashboard:
 
-After installation, run `npm install` and then run `npm start` which will open up a preview of the template in your default browser, watch for changes to core template files, and live reload the browser when changes are saved. You can view the `gulpfile.js` to see which tasks are included with the dev environment.
+HOME
 
-### Gulp Tasks
+-Posti disponibili+tasto aggiorna
 
-* `gulp` the default task that builds everything
-* `gulp watch` browserSync opens the project in your default browser and live reloads when changes are made
-* `gulp css` compiles SCSS files into CSS and minifies the compiled CSS
-* `gulp js` minifies the themes JS file
-* `gulp vendor` copies dependencies from node_modules to the vendor directory
+-Registro entrate ultimi 7 giorni+filtro per giorno da * a * 
 
-You must have npm installed globally in order to use this build environment. This theme was built using node v11.6.0 and the Gulp CLI v2.0.1. If Gulp is not running properly after running `npm install`, you may need to update node and/or the Gulp CLI locally.
+-Registro uscite ultimi 7 giorni+filtro per giorno da * a *
 
-## Bugs and Issues
 
-Have a bug or an issue with this template? [Open a new issue](https://github.com/StartBootstrap/startbootstrap-sb-admin-2/issues) here on GitHub or leave a comment on the [template overview page at Start Bootstrap](https://startbootstrap.com/theme/sb-admin-2/).
+TABS 
 
-## About
+-Ricerca profilo per nome/targa->gestisci:
 
-Start Bootstrap is an open source library of free Bootstrap templates and themes. All of the free templates and themes on Start Bootstrap are released under the MIT license, which means you can use them for any purpose, even for commercial projects.
+targhe auto(rimuovi o assegna una targa,se non registrata richiedi modello)
+utente(es. operazioni profilo,aggiorna permessi per una o ogni auto,aggiorna classe(personale/docente o esterno))
+cronologia registrazioni ultimi 30(?) giorni dell'utente
 
-* <https://startbootstrap.com>
-* <https://twitter.com/SBootstrap>
+-richieste
 
-Start Bootstrap was created by and is maintained by **[David Miller](https://davidmiller.io/)**.
+rinnovo:nome,cognome permesso da rinnovare,durata (da * a *)e targa associata al permesso
+targa:nome,cognome,targa ed eventuale permesso da aggiungere (da * a *)
+registrazione:contenente ogni dato dell'utente(sempre aggiunti dallo stesso durante la registrazione),i quali:
+	 dati anagrafici+classe(personale/docente o esterno)+targa(se nuova,allora viene richiesto il modello)
+	 e tasto "aggiungi permesso(opzionale(?))"->durata(da * a*) 
 
-* <https://davidmiller.io>
-* <https://twitter.com/davidmillerhere>
-* <https://github.com/davidtmiller>
 
-Start Bootstrap is based on the [Bootstrap](https://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
 
-## Copyright and License
-
-Copyright 2013-2021 Start Bootstrap LLC. Code released under the [MIT](https://github.com/StartBootstrap/startbootstrap-resume/blob/master/LICENSE) license.
+LINK REPOSITORY

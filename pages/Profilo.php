@@ -1,31 +1,25 @@
 <?php
-    $profilo = (new Database())->execute_query("SELECT UTENTI.NOME AS Nome, UTENTI.COGNOME AS Cognome, UTENTI.EMAIL AS Email, UTENTI.CODICE_FISCALE AS CF, UTENTI.TELEFONO AS Telefono FROM UTENTI 
-    WHERE UTENTI.ID = " . $_SESSION['user']['ID']);
+require_once('database.php');
+$db = new Database();
+$profilo = $db->execute_query("SELECT RUOLI.DESCRIZIONE AS Ruolo, UTENTI.NOME AS Nome, UTENTI.COGNOME AS Cognome, UTENTI.EMAIL AS Email, UTENTI.CODICE_FISCALE AS CF, UTENTI.TELEFONO AS Telefono FROM UTENTI, RUOLI 
+WHERE UTENTI.ID_RUOLO = RUOLI.ID AND UTENTI.ID = " . $_SESSION['user']['ID'])->fetch_assoc();
 ?>
- <div class="col-xl-8 col-lg-7">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Profilo</h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                </div>
-            <!--Profilo-->
-            </div>
-        <div id= class="">
-            <p><? "Nome: ".$profilo['Nome'] ?></p>
-            <br>
-            <p><? "Cognome: ".$profilo['Cognome']?></p>
-            <br>
-            <p><? "Codice Fiscale: ".$profilo['CF']?></p>
-            <br>
-            <p><? "Numero di Telefono: ".$profilo['Telefono']?></p>
-            <br>
-            <p><? "Email: ".$profilo['Email'] ?></p>
-            <br>
-        </div>
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="text-center">Profilo - <?php echo $profilo['Nome']; ?> <?php echo $profilo['Cognome']; ?></h1>
+</div>
+<div class="card" style="font-size: 20px">
+    <p> <strong>Nome: </strong><?php echo $profilo['Nome']; ?></p>
+    <br>
+    <p><strong>Cognome: </strong><?php echo $profilo['Cognome']; ?></p>
+    <br>
+    <p><strong>Codice Fiscale: </strong><?php echo $profilo['CF']; ?></p>
+    <br>
+    <p><strong>Numero di telefono: </strong><?php echo $profilo['Telefono']; ?></p>
+    <br>
+    <p><strong>Email: </strong><?php echo $profilo['Email']; ?></p>
+    <br>
+    <p> <strong>Ruolo: </strong><?php echo $profilo['Ruolo']; ?></p>
+    <br>
     </div>
+</div>
 </div>

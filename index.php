@@ -226,7 +226,7 @@ if (!$logged){
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="?page_id=7">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -277,6 +277,9 @@ if (!$logged){
                                 break;
                             case 6:
                                 include('pages/accessi.php');
+                                break;
+                            case 7:
+                                include('pages/profilo.php');
                                 break;
                             default:
                                 include('pages/index.php');

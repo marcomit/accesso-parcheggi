@@ -8,19 +8,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $tipologia = $_POST['tipologia'];
     $db->execute_query("INSERT INTO VEICOLI(TARGA, MODELLO, ID_TIPO, ID_UTENTE) VALUES ('$targa', '$modello', '$tipologia', " . $_SESSION['user']['ID'] . ")");
 }
-
-$veicoli_personali = $db->execute_query(
-    "SELECT VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE, AUTORIZZAZIONI.INIZIO, AUTORIZZAZIONI.FINE FROM VEICOLI " . 
-    "INNER JOIN AUTORIZZAZIONI ON VEICOLI.ID = AUTORIZZAZIONI.ID_VEICOLO " . 
-    "INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO " .
-    "INNER JOIN UTENTI ON UTENTI.ID = VEICOLI.ID_UTENTE WHERE UTENTI.ID = " . $_SESSION['user']['ID']);
-
-if($_SESSION['user']['RUOLO'] == "ADMIN"){
-    $veicoli_totali = $db->execute_query(
-        "SELECT VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE, AUTORIZZAZIONE.INIZIO, AUTORIZZAZIONE.FINE, AUTORIZZAZIONE.STATO_RICHIESTA, UTENTI.EMAIL FROM VEICOLI " .
-        "INNER JOIN AUTORIZZAZIONI ON VEICOLI.ID = AUTORIZZAZIONI.ID_VEICOLO ".
-        "INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO ".
-        "INNER JOIN UTENTI ON UTENTI.ID = VEICOLI.ID_UTENTE");
+if($_SESSION['user']['RUOLO']==="ADMIN"){
+    $veicoli = $db->execute_query(
+        "SELECT VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO, UTENTI.EMAIL AS UTENTE FROM VEICOLI
+        INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO
+        INNER JOIN UTENTI ON UTENTI.ID = VEICOLI.ID_UTENTE");
+}
+else{
+    $Utente=$_SESSION['user']['ID'];
+    $veicoli = $db->execute_query(
+        "SELECT VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO, UTENTI.EMAIL AS UTENTE FROM VEICOLI
+        INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO
+        INNER JOIN UTENTI ON UTENTI.ID = VEICOLI.ID_UTENTE WHERE UTENTI.ID=$Utente");
 }
 ?>
 <!-- Logout Modal-->
@@ -72,10 +71,35 @@ if($_SESSION['user']['RUOLO'] == "ADMIN"){
             class="fas fa-plus fa-sm text-white-50"></i> Aggiungi veicolo</a>
 </div>
 
-<?php if($_SESSION['user']['RUOLO'] == 'ADMIN'): ?>
-    <?php while($veicolo = $veicoli_totali->fetch_assoc()): ?>
-        
-    <?php endwhile; ?>
-<?php else: ?>
-    <h2>prrr</h2>
-<?php endif ?>
+<div class="container mt-5">
+<h1>Veicoli</h1>
+<table class="table table-bordered" id="dataTable">
+    <thead>
+        <tr>
+            <th data-sort="Targhe">Targhe</th>
+            <th data-sort="Modelli">Modelli</th>
+            <th data-sort="ID_Tipo">Tipo</th>
+            <th data-sort="ID_Utente">Utente</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        <?php while($veicolo = $veicoli->fetch_assoc()): ?>
+            <tr>
+                <td><?= $veicolo['TARGA'] ?></td>
+                <td><?= $veicolo['MODELLO'] ?></td>
+                <td><?= $veicolo['TIPO'] ?></td>
+                <td><?= $veicolo['UTENTE'] ?></td>
+            </tr>
+        <?php endwhile; ?>
+    </tbody>
+</table>
+</div>
+
+
+
+
+
+
+
+                

@@ -12,7 +12,7 @@ $items = [
     ],
     [
         "name" => "Autorizzazioni",
-        "icon" => "fas fa-fw fa-tachometer-alt",
+        "icon" => "fas fa-check",
         "require_admin" => false,
         "sub_items" => [
             ["name" => "Autorizzazioni"],

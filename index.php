@@ -284,7 +284,7 @@ if (!$logged){
                                 include('pages/profilo.php');
                                 break;
                             case 8:
-                                include('pages/modifica_richiesta.php');
+                                include('pages/inserisci_richiesta.php');
                                 break;
                             default:
                                 include('pages/index.php');
@@ -363,6 +363,7 @@ if (!$logged){
 
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+    <script src="js/richiesta.js"></script>
 
 </body>
 

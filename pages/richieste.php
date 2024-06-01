@@ -13,7 +13,7 @@ function updateRequestStatus($id, $stato) {
     $result = $db->execute_query("UPDATE AUTORIZZAZIONI SET STATO_RICHIESTA = $stato WHERE ID = $id");
 
     if(!$result){
-        echo "Errore";
+        return "Errore durante l'aggiornamento dello stato della richiesta";
     }
 }
 
@@ -30,8 +30,12 @@ $autorizzazioni = $db->execute_query(
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Richieste</h1>
-    <a href="index.php?page_id=8" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+    <div>
+        <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-retweet fa-sm"></i></a>
+        <a href="index.php?page_id=8" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-plus fa-sm text-white-50"></i> Invia richiesta</a>
+    </div>
 </div>
 
 <!-- DataTales Example -->

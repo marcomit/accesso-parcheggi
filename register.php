@@ -8,24 +8,46 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $fiscal_code = $_POST['fiscal-code'];
     $telephone = $_POST['telephone'];
     
+    if(!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)){
+        $error_registration = 'The password must contain at least one uppercase letter, one lowercase letter, one number and one special character';
+    }
+
+    if(!preg_match('/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/', $fiscal_code)){
+        $error_registration = 'The fiscal code is not valid';
+    }    
+
     if($password !== $repeat_password){
-        echo 'The passwords do not match';
+        $error_registration = 'The passwords do not match';
     }
     
-    include('database.php');
-
-    $sql = "INSERT INTO UTENTI(NOME, COGNOME, EMAIL, PASSWORD, CODICE_FISCALE, TELEFONO, ID_RUOLO) " .
-    "VALUES ('$first_name', '$last_name', '$email', '" . hash("sha256", $password) . "', '$fiscal_code', '$telephone', 1)";    
+    include('database.php');   
     
     $db = new Database();
     
-    $result = $db->execute_query($sql);
+    $result = $db->execute_query(
+        "INSERT INTO UTENTI(NOME, COGNOME, EMAIL, PASSWORD, CODICE_FISCALE, TELEFONO, ID_RUOLO)
+        VALUES ('$first_name', '$last_name', '$email', '" . hash("sha256", $password) . "', '$fiscal_code', '$telephone', 1)");
+
     if($result){
         header('Location: login.php');
     }
     else{
         $error_registration = "C'è stato un errore nell'inserimento dei dati!";
     }
+}
+function validateRegistration(string $first_name, string $last_name, string $email, string $password, string $repeat_password, string $fiscal_code, string $telephone): string{
+    if(!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)){
+        return 'The password must contain at least one uppercase letter, one lowercase letter, one number and one special character';
+    }
+
+    if(!preg_match('/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/', $fiscal_code)){
+        return 'The fiscal code is not valid';
+    }    
+
+    if($password !== $repeat_password){
+        return 'The passwords do not match';
+    }
+
 }
 ?>
 
@@ -100,6 +122,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="tel" class="form-control form-control-user" id="phone" name="phone"
+                                            pattern="/^(\+39|0039)?\s?(\d{2,4})\s?[\d\s-]{6,10}$/"
                                             placeholder="Phone number" required>
                                     </div>
                                 </div>

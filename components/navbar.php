@@ -20,11 +20,6 @@ $items = [
         ]
     ],
     [
-        "name" => "Personale",
-        "icon" => "fa fa-id-badge",
-        "require_admin" => false
-    ],
-    [
         "name" => "Veicoli",
         "icon" => "fa fa-car",
         "require_admin" => false
@@ -34,6 +29,11 @@ $items = [
         "icon" => "fa fa-car",
         "require_admin" => false
     ],
+    [
+        "name" => "Statistiche",
+        "icon" => "fas fa-fw fa-chart-area",
+        "require_admin" => false
+    ]
 ];
 
 $page_id = isset($_GET['page_id']) ? $_GET['page_id'] : 0;

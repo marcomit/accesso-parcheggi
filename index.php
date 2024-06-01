@@ -32,6 +32,8 @@ if (!$logged){
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
 </head>
 
 <body id="page-top">
@@ -270,16 +272,19 @@ if (!$logged){
                                 include('pages/richieste.php');
                                 break;
                             case 4:
-                                include('pages/utenti.php');
-                                break;
-                            case 5:
                                 include('pages/veicoli.php');
                                 break;
-                            case 6:
+                            case 5:
                                 include('pages/accessi.php');
+                                break;
+                            case 6:
+                                include('pages/statistiche.php');
                                 break;
                             case 7:
                                 include('pages/profilo.php');
+                                break;
+                            case 8:
+                                include('pages/modifica_richiesta.php');
                                 break;
                             default:
                                 include('pages/index.php');
@@ -350,6 +355,14 @@ if (!$logged){
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="js/demo/chart-bar-demo.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/datatables-demo.js"></script>
 
 </body>
 

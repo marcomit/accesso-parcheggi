@@ -7,7 +7,6 @@ if($_SESSION['user']['RUOLO'] === "ADMIN")
       $db -> execute_query("UPDATE UTENTI SET UTENTI.ID_RUOLO = ".$_POST['ruolo']." WHERE ID = ".$_POST['utente']."");
     }
     $utenti = $db->execute_query("SELECT RUOLI.DESCRIZIONE AS Ruolo, UTENTI.ID AS ID, UTENTI.NOME AS Nome, UTENTI.COGNOME AS Cognome, UTENTI.EMAIL AS Email, UTENTI.CODICE_FISCALE AS CF, UTENTI.TELEFONO AS Telefono FROM UTENTI JOIN RUOLI ON UTENTI.ID_RUOLO = RUOLI.ID");
-
 }
 else{
     http_response_code(404);

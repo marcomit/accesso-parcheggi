@@ -13,7 +13,6 @@ if (!$logged){
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -216,14 +215,15 @@ if (!$logged){
                         </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>
+                        <?php $initials = strtoupper(substr($current_user['NOME'], 0, 1) . substr($current_user['COGNOME'], 0, 1));?>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $current_user['RUOLO'] . " " . $current_user['NOME'] . " " . $current_user['COGNOME']; ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <div class="profile" style=""><?php echo $initials; ?></div>
+
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -366,5 +366,4 @@ if (!$logged){
     <script src="js/richiesta.js"></script>
 
 </body>
-
 </html>

@@ -331,5 +331,22 @@ $posti_occupati = $db->execute_query("SELECT COUNT(*) AS C FROM ACCESSI_VEICOLO 
             </div>
         </div>
 
+       <?php $initials = strtoupper(substr($profilo['Nome'], 0, 1) . substr($profilo['Cognome'], 0, 1));?>
+
+<style>
+    .profile-initials {
+        width: 100px;
+        height: 100px;
+        background-color: #6c757d;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto;
+    }
+</style>
     </div>
 </div>

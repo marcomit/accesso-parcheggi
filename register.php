@@ -1,53 +1,48 @@
 <?php
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $error_registration = validateRegistration();
+}
+function validateRegistration(): string {
     $first_name = $_POST['first-name'];
     $last_name = $_POST['last-name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $repeat_password = $_POST['repeat-password'];
     $fiscal_code = $_POST['fiscal-code'];
-    $telephone = $_POST['telephone'];
-    
-    if(!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)){
-        $error_registration = 'The password must contain at least one uppercase letter, one lowercase letter, one number and one special character';
-    }
+    $telephone = $_POST['phone'];
 
-    if(!preg_match('/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/', $fiscal_code)){
-        $error_registration = 'The fiscal code is not valid';
-    }    
-
-    if($password !== $repeat_password){
-        $error_registration = 'The passwords do not match';
-    }
-    
-    include('database.php');   
-    
-    $db = new Database();
-    
-    $result = $db->execute_query(
-        "INSERT INTO UTENTI(NOME, COGNOME, EMAIL, PASSWORD, CODICE_FISCALE, TELEFONO, ID_RUOLO)
-        VALUES ('$first_name', '$last_name', '$email', '" . hash("sha256", $password) . "', '$fiscal_code', '$telephone', 1)");
-
-    if($result){
-        header('Location: login.php');
-    }
-    else{
-        $error_registration = "C'è stato un errore nell'inserimento dei dati!";
-    }
-}
-function validateRegistration(string $first_name, string $last_name, string $email, string $password, string $repeat_password, string $fiscal_code, string $telephone): string{
     if(!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)){
         return 'The password must contain at least one uppercase letter, one lowercase letter, one number and one special character';
     }
 
     if(!preg_match('/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/', $fiscal_code)){
         return 'The fiscal code is not valid';
-    }    
+    }   
+    
+    if(!preg_match('/^(\+39|0039)?\s?(\d{2,4})\s?[\d\s-]{6,10}$/', $telephone)){
+        return 'The phone number is not valid';
+    }
 
     if($password !== $repeat_password){
         return 'The passwords do not match';
     }
 
+    include('database.php');   
+    
+    $db = new Database();
+    
+    if($db->execute_query("SELECT *FROM UTENTI WHERE EMAIL = '$email' LIMIT 1")->num_rows > 0){
+        return "This email is already registered!";
+    }
+
+    $result = $db->execute_query(
+        "INSERT INTO UTENTI(NOME, COGNOME, EMAIL, PASSWORD, CODICE_FISCALE, TELEFONO, ID_RUOLO)
+        VALUES ('$first_name', '$last_name', '$email', '" . hash("sha256", $password) . "', '$fiscal_code', '$telephone', 1)");
+
+    if(!$result){
+        return "C'è stato un errore nell'inserimento dei dati!";
+    }
+    header('Location: login.php');
 }
 ?>
 
@@ -89,6 +84,11 @@ function validateRegistration(string $first_name, string $last_name, string $ema
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
+                            <?php if(isset($error_registration)): ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= $error_registration; ?>
+                                </div>
+                            <?php endif ?>
                             <form class="user" method="POST" action="register.php">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -122,8 +122,7 @@ function validateRegistration(string $first_name, string $last_name, string $ema
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="tel" class="form-control form-control-user" id="phone" name="phone"
-                                            pattern="/^(\+39|0039)?\s?(\d{2,4})\s?[\d\s-]{6,10}$/"
-                                            placeholder="Phone number" required>
+                                            placeholder="Telefono" required>
                                     </div>
                                 </div>
                                 <input type="submit" value="Register Account" class="btn btn-primary btn-user btn-block"/>

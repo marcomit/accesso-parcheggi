@@ -11,16 +11,17 @@ $preavvisi = $db->execute_query(
     INNER JOIN UTENTI ON UTENTI.ID = VEICOLI.ID_UTENTE
     WHERE DATEDIFF(AUTORIZZAZIONI.FINE, NOW()) = 1");
 
+$oggetto = "Preavviso";
+$headers = "From: noreply@5bia.it\r\n";
+$headers .= "Reply-To: noreply@5bia.it\r\n";
+$headers .= "Content-type: text/plain; charset=UTF-8\r\n";
+
 foreach ($preavvisi as $preavviso) {
     $email = $preavviso['EMAIL'];
     $targa = $preavviso['TARGA'];
     $modello = $preavviso['MODELLO'];
     $tipo = $preavviso['TIPO'];
-    $oggetto = "Preavviso";
     $messaggio = "Attenzione!!! Tra una settinana la tua autorizzazione per il veicolo targato $targa $modello scadrà.";
-    $headers = "From: noreply@5bia.it\r\n";
-    $headers .= "Reply-To: noreply@5bia.it\r\n";
-    $headers .= "Content-type: text/plain; charset=UTF-8\r\n";
 
     if(mail($email, $oggetto, $messaggio, $headers)) {
         echo "Email inviata";

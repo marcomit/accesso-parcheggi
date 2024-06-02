@@ -53,10 +53,11 @@ if(isset($id_richiesta)) {
         " LIMIT 1"
     );
     if($autorizzazione->num_rows === 0) $richiesta_valida = false;
-    else $autorizzazione = $autorizzazione->fetch_assoc();
-
-    if($autorizzazione['ID'] !== $_SESSION['user']['ID'] && $_SESSION['user']['RUOLO'] === "ADMIN"){
-        $disabled = true;
+    else {
+        $autorizzazione = $autorizzazione->fetch_assoc();
+        if($autorizzazione['ID'] !== $_SESSION['user']['ID'] && $_SESSION['user']['RUOLO'] === "ADMIN"){
+            $disabled = true;
+        }
     }
 
 }

@@ -284,7 +284,7 @@ if (!$logged){
                                 include('pages/profilo.php');
                                 break;
                             case 8:
-                                include('pages/inserisci_richiesta.php');
+                                include('pages/inserisci-richiesta.php');
                                 break;
                             default:
                                 include('pages/index.php');
@@ -339,6 +339,16 @@ if (!$logged){
         </div>
     </div>
 
+    <div class="toast-container position-fixed p-3" style="bottom: 0; right: 0;">
+        <div id="liveToast" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header justify-content-between">
+                <strong class="me-auto" id="toast-title">sdfvsdfv</strong>
+                <button type="button" class="fa fa-close" onclick="document.getElementById('liveToast').classList.remove('show')" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast-body">sdfvsdfv</div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -363,6 +373,6 @@ if (!$logged){
 
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
-
+    <script src="js/toast.js"></script>
 </body>
 </html>

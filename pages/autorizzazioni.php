@@ -4,6 +4,7 @@ require_once(__DIR__ . "/../database.php");
 
 $db = new Database();
 
+
 // VISUALIZZA TUTTE LE AUTORIZZAZIONI
 $autorizzazioni = $db->execute_query(
     "SELECT AUTORIZZAZIONI.ID, AUTORIZZAZIONI.INIZIO, AUTORIZZAZIONI.FINE, AUTORIZZAZIONI.STATO_RICHIESTA, VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO, UTENTI.NOME, UTENTI.COGNOME, RUOLI.DESCRIZIONE AS RUOLO
@@ -21,8 +22,10 @@ $autorizzazioni = $db->execute_query(
         <i class="fas fa-retweet fa-sm text-white-50"></i> Aggiorna</a>
 </div>
 
+<?php if(isset($errore)): echo $errore; endif;?>
 <?php if($autorizzazioni->num_rows == 0): ?>
     <div><h2>Non hai nessuna autorizzazione attiva</h2></div>
+        
 <?php else: ?>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -44,7 +47,7 @@ $autorizzazioni = $db->execute_query(
                     </tfoot>
                     <tbody>
                         <?php while($autorizzazione = $autorizzazioni->fetch_assoc()): ?>
-                            <tr data-toggle="modal" data-target="#cambioRichiesta">
+                            <tr>
                                 <?php if($_SESSION['user']['RUOLO'] == 'ADMIN'): ?>
                                     <td><?= $autorizzazione['NOME'] . " " . $autorizzazione['COGNOME'] . " - " . $autorizzazione['RUOLO'] ?></td>
                                 <?php endif; ?>

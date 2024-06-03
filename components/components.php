@@ -130,4 +130,33 @@ class Components{
             <a href="<?= $href ?>">← Torna alla dashboard...</a>
         </div><?php
     }
+    public static function card(string $title, string $content, string $icon, string $color = "primary", int $width = 0){?>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-<?= $color ?> shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-<?= $color ?> text-uppercase mb-1"><?= $title ?>
+                            </div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?= $content ?></div>
+                                </div>
+                                <div class="col <?= $width == 0 ? "d-none" : "" ?>">
+                                    <div class="progress progress-sm mr-2">
+                                        <div class="progress-bar bg-<?= $color ?>" role="progressbar"
+                                            style="width: <?= $width ?>%" aria-valuenow="<?= $width ?>" aria-valuemin="0"
+                                            aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas <?= $icon ?> fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php }
 }

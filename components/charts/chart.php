@@ -13,7 +13,7 @@ class Chart{
                 data: {
                     labels: [<?php foreach ($values as $key => $value): ?>'<?= $key ?>',<?php endforeach ?>],
                     datasets: [{
-                    data: [<?php foreach ($values as $key => $value): ?><?= $value ?>,<?php endforeach ?>],
+                    data: [<?php foreach ($values as $key => $value): ?><?= $value == 0 ? 1 : $value ?>,<?php endforeach ?>],
                     backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
                     hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
@@ -39,7 +39,7 @@ class Chart{
             });
         </script>
     <?php }
-    public static function bar(string $target, string $query, string $label, string $data, string $point_label){
+    public static function bar(string $target, string $query, string $label, string $data, string $point_label, ?callable $formatKey = null, ?callable $formatValue = null){
         $result = Database::query($query);
         $values = array();
         while($item = $result->fetch_assoc()){
@@ -50,13 +50,14 @@ class Chart{
             new Chart(document.getElementById("<?= $target ?>"), {
             type: 'bar',
             data: {
-                labels: [<?php foreach($values as $key => $value): ?>"<?= $key ?>",<?php endforeach ?>],
+                labels: [<?php foreach($values as $key => $value): ?>"<?= $formatKey === null ? $key : $formatKey($key) ?>",<?php endforeach ?>],
                 datasets: [{
-                label: "<?= $point_label ?>",
-                backgroundColor: "#4e73df",
-                hoverBackgroundColor: "#2e59d9",
-                borderColor: "#4e73df",
-                data: [<?php foreach($values as $key => $value): ?><?= $value ?>,<?php endforeach ?>],
+                    label: "<?= $point_label ?>",
+                    backgroundColor: "#4e73df",
+                    hoverBackgroundColor: "#2e59d9",
+                    borderColor: "#4e73df",
+                    data: [<?php foreach($values as $key => $value): ?><?= $formatValue === null ? $value : $formatValue($value) ?>,<?php endforeach ?>],
+                    maxBarThickness: 40,
                 }],
             },
             options: {
@@ -81,17 +82,16 @@ class Chart{
                     ticks: {
                     maxTicksLimit: 6
                     },
-                    maxBarThickness: 25,
                 }],
                 yAxes: [{
                     ticks: {
                     min: 0,
-                    max: 15000,
+                    //max: 15000,
                     maxTicksLimit: 5,
                     padding: 10,
                     // Include a dollar sign in the ticks
                     callback: function(value, index, values) {
-                        return '$' + value;
+                        return parseInt(value);
                     }
                     },
                     gridLines: {
@@ -129,7 +129,7 @@ class Chart{
             });
         </script>
     <?php }
-    public static function area(string $target, string $query, string $balel, string $data, string $point_label){
+    public static function area(string $target, string $query, string $label, string $data, string $point_label, ?callable $formatKey = null, ?callable $formatValue = null){
         $result = Database::query($query);
         $values = array();
         while($item = $result->fetch_assoc()){
@@ -140,21 +140,21 @@ class Chart{
             new Chart(document.getElementById("<?= $target ?>"), {
                 type: 'line',
                 data: {
-                    labels: [<?php foreach($values as $key => $value): ?>"<?= $key ?>",<?php endforeach ?>],
+                    labels: [<?php foreach($values as $key => $value): ?>"<?= $formatKey === null ? $key : $formatKey($key) ?>",<?php endforeach ?>],
                     datasets: [{
-                    label: "<?= $point_label ?>",
-                    lineTension: 0.3,
-                    backgroundColor: "rgba(78, 115, 223, 0.05)",
-                    borderColor: "rgba(78, 115, 223, 1)",
-                    pointRadius: 3,
-                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                    pointBorderColor: "rgba(78, 115, 223, 1)",
-                    pointHoverRadius: 3,
-                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                    pointHitRadius: 10,
-                    pointBorderWidth: 2,
-                    data: [<?php foreach($values as $key => $value): ?><?= $value ?>,<?php endforeach ?>],
+                        label: "<?= $point_label ?>",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(78, 115, 223, 0.05)",
+                        borderColor: "rgba(78, 115, 223, 1)",
+                        pointRadius: 3,
+                        pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHoverRadius: 3,
+                        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 2,
+                        data: [<?php foreach($values as $key => $value): ?><?= $formatValue === null ? $value : $formatValue($value) ?>,<?php endforeach ?>],
                     }],
                 },
                 options: {
@@ -170,7 +170,7 @@ class Chart{
                     scales: {
                     xAxes: [{
                         time: {
-                        unit: 'date'
+                        unit: 'hour'
                         },
                         gridLines: {
                         display: false,
@@ -186,7 +186,7 @@ class Chart{
                         padding: 10,
                         // Include a dollar sign in the ticks
                         callback: function(value, index, values) {
-                            return '$' + value;
+                            return value;
                         }
                         },
                         gridLines: {

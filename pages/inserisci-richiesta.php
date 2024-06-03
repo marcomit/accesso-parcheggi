@@ -1,7 +1,4 @@
 <?php
-require_once(__DIR__ . '/../database.php');
-
-$db = new Database();
 
 $id_richiesta = $_GET['id_richiesta'] ?? null;
 
@@ -10,13 +7,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($id_richiesta)){
         // AGGIORNA RICHIESTA
         if($_SESSION['user']['RUOLO'] === "ADMIN" && isset($_POST['status'])) {
-            $result = $db->execute_query(
+            $result = Database::query(
                 "UPDATE AUTORIZZAZIONI
                 SET STATO_RICHIESTA = '" . $_POST['status'] . "' WHERE ID = " . $id_richiesta
             );
         }
         else{
-            $result = $db->execute_query(
+            $result = Database::query(
                 "UPDATE AUTORIZZAZIONI 
                 SET INIZIO = '" . $_POST['startDate'] . "', FINE = '" . $_POST['endDate'] . "', ID_VEICOLO = '" . $_POST['vehicle'] . "' WHERE ID = " . $id_richiesta
             );
@@ -24,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     else {
         // INSERISCE RICHIESTA
-        $result = $db->execute_query(
+        $result = Database::query(
             "INSERT INTO AUTORIZZAZIONI (INIZIO, FINE, ID_VEICOLO)
             VALUES ('" . $_POST['startDate'] . "', '" . $_POST['endDate'] . "', '" . $_POST['vehicle'] . "')"
         );
@@ -41,7 +38,7 @@ $richiesta_valida = true;
 $disabled = false;
 
 if(isset($id_richiesta)) {
-    $autorizzazione = $db->execute_query(
+    $autorizzazione = Database::query(
         "SELECT RUOLI.DESCRIZIONE AS RUOLO, UTENTI.EMAIL, UTENTI.ID, VEICOLI.ID AS VEICOLO, AUTORIZZAZIONI.INIZIO, AUTORIZZAZIONI.FINE, VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO
         FROM AUTORIZZAZIONI
         INNER JOIN VEICOLI ON AUTORIZZAZIONI.ID_VEICOLO = VEICOLI.ID
@@ -62,12 +59,8 @@ if(isset($id_richiesta)) {
 
 }
 
-if($richiesta_valida): ?>
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><?= isset($id_richiesta) ? "Aggiorna" : "Inserisci" ?> richiesta</h1>
-</div>
-
+if($richiesta_valida):
+Components::heading((isset($id_richiesta) ? "Aggiorna" : "Inserisci") . " richiesta") ?>
 <div class="card shadow mb-4 w-75 mx-auto">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Richieste</h6>
@@ -87,18 +80,19 @@ if($richiesta_valida): ?>
             <div class="form-group">
                 <label for="vehicle">Veicolo</label>
                 <select class="form-control" id="vehicle" name="vehicle" required <?= $disabled ? "disabled" : "" ?>>
-                    <option value="">Seleziona un veicolo</option>
-                    <?php 
-                    $veicoli = $db->execute_query(
-                        "SELECT VEICOLI.ID, VEICOLI.TARGA, VEICOLI.MODELLO FROM VEICOLI
-                        WHERE VEICOLI.ID_UTENTE = " . $_SESSION['user']['ID']
-                    );
-                    while($veicolo = $veicoli->fetch_assoc()): ?>
-                        <option value="<?= $veicolo['ID'] ?>"
-                            <?= isset($id_richiesta) && $autorizzazione['VEICOLO'] === $veicolo['ID'] ? 'selected' : '' ?>>
-                            <?= $veicolo['TARGA'] . ' - ' . $veicolo['MODELLO'] ?>
-                        </option>
-                    <?php endwhile; ?>
+                    <?php if($disabled): ?>
+                        <option value="<?= $autorizzazione['VEICOLO'] ?>"><?= $autorizzazione['TIPO'] .' - ' . $autorizzazione['TARGA'] . ' - ' . $autorizzazione['MODELLO'] ?></option>
+                    <?php else: ?>
+                        <option value="">Seleziona un veicolo</option>
+                        <?php $veicoli = Database::query("SELECT VEICOLI.ID, VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO FROM VEICOLI
+                        INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO
+                        WHERE VEICOLI.ID_UTENTE = " . $_SESSION['user']['ID']);
+                        while($veicolo = $veicoli->fetch_assoc()): ?>
+                            <option value="<?= $veicolo['ID'] ?>"
+                                <?= isset($id_richiesta) && $autorizzazione['VEICOLO'] === $veicolo['ID'] ? 'selected' : '' ?>>
+                                <?= $veicolo['TIPO'] . ' - ' . $veicolo['TARGA'] . ' - ' . $veicolo['MODELLO'] ?>
+                            </option>
+                    <?php endwhile; endif; ?>
                 </select>
             </div>
             <?php if($disabled): ?>
@@ -111,8 +105,9 @@ if($richiesta_valida): ?>
                     </select>
                 </div>
             <?php endif ?>
+            <a href="<?= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "/" ?>" class="btn btn-outline-danger">Annulla</a>
             <button type="submit" class="btn btn-primary"><?= isset($id_richiesta) ? "Aggiorna" : "Inserisci" ?></button>
         </form>
     </div>
 </div>
-<?php else: include(__DIR__ . '/../404.html'); endif;?>
+<?php else: Components::not_found(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "/", "500", "Richiesta inesistente o non hai i permessi per modificarla."); endif?>

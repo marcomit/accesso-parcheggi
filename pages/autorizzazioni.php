@@ -1,28 +1,20 @@
 
 <?php
-require_once(__DIR__ . "/../database.php");
+$query = "SELECT AUTORIZZAZIONI.ID, AUTORIZZAZIONI.INIZIO, AUTORIZZAZIONI.FINE, AUTORIZZAZIONI.STATO_RICHIESTA, VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO, UTENTI.NOME, UTENTI.COGNOME, RUOLI.DESCRIZIONE AS RUOLO
+FROM AUTORIZZAZIONI
+INNER JOIN VEICOLI ON AUTORIZZAZIONI.ID_VEICOLO = VEICOLI.ID
+INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO
+INNER JOIN UTENTI ON UTENTI.ID = VEICOLI.ID_UTENTE
+INNER JOIN RUOLI ON RUOLI.ID = UTENTI.ID_RUOLO
+WHERE AUTORIZZAZIONI.STATO_RICHIESTA = 1";
 
-$db = new Database();
+if($_SESSION['user']['RUOLO'] !== "ADMIN"){
+    $query .= " AND UTENTI.ID = " . $_SESSION['user']['ID'];
+}
+$autorizzazioni = Database::query($query);
 
+Components::heading("Autorizzazioni", "fa fa-retweet", "Aggiorna", "", "btn-outline-primary") ?>
 
-// VISUALIZZA TUTTE LE AUTORIZZAZIONI
-$autorizzazioni = $db->execute_query(
-    "SELECT AUTORIZZAZIONI.ID, AUTORIZZAZIONI.INIZIO, AUTORIZZAZIONI.FINE, AUTORIZZAZIONI.STATO_RICHIESTA, VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO, UTENTI.NOME, UTENTI.COGNOME, RUOLI.DESCRIZIONE AS RUOLO
-    FROM AUTORIZZAZIONI
-    INNER JOIN VEICOLI ON AUTORIZZAZIONI.ID_VEICOLO = VEICOLI.ID
-    INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO
-    INNER JOIN UTENTI ON UTENTI.ID = VEICOLI.ID_UTENTE
-    INNER JOIN RUOLI ON RUOLI.ID = UTENTI.ID_RUOLO
-    WHERE AUTORIZZAZIONI.STATO_RICHIESTA = 1");// RICHIESTE AUTORIZZATE
-?>
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Autorizzazioni</h1>
-    <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-        <i class="fas fa-retweet fa-sm text-white-50"></i> Aggiorna</a>
-</div>
-
-<?php if(isset($errore)): echo $errore; endif;?>
 <?php if($autorizzazioni->num_rows == 0): ?>
     <div><h2>Non hai nessuna autorizzazione attiva</h2></div>
         
@@ -48,7 +40,7 @@ $autorizzazioni = $db->execute_query(
                     <tbody>
                         <?php while($autorizzazione = $autorizzazioni->fetch_assoc()): ?>
                             <tr>
-                                <?php if($_SESSION['user']['RUOLO'] == 'ADMIN'): ?>
+                                <?php if($_SESSION['user']['RUOLO'] === 'ADMIN'): ?>
                                     <td><?= $autorizzazione['NOME'] . " " . $autorizzazione['COGNOME'] . " - " . $autorizzazione['RUOLO'] ?></td>
                                 <?php endif; ?>
                                 <td><?= date("d M y", strtotime($autorizzazione['INIZIO'])) ?></td>

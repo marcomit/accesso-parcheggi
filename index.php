@@ -2,6 +2,8 @@
 session_start();
 if (isset($_SESSION['user'])){
     require_once('database.php');
+    require_once("components/charts/chart.php");
+    Database::connect();
     $logged = 1;
     $current_user = $_SESSION['user'];
 }
@@ -30,6 +32,9 @@ if (!$logged){
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
 
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
@@ -148,72 +153,6 @@ if (!$logged){
                             </div>
                         </li>
 
-                        <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    Message Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                            problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                            </div>
-                        </li>
-
                         <div class="topbar-divider d-none d-sm-block"></div>
                         <?php $initials = strtoupper(substr($current_user['NOME'], 0, 1) . substr($current_user['COGNOME'], 0, 1));?>
 
@@ -228,7 +167,7 @@ if (!$logged){
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="?page_id=7">
+                                <a class="dropdown-item" href="?page_id=8">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -255,46 +194,7 @@ if (!$logged){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <?php
-                    if(!isset($_GET['page_id'])) {
-                        include('pages/index.php');
-                    }
-                    else{
-                        switch($_GET['page_id']) {
-                            case 1:
-                                include('pages/utenti.php');
-                                break;
-                            case 2:
-                                include('pages/autorizzazioni.php');
-                                break;
-                            case 3:
-                                include('pages/richieste.php');
-                                break;
-                            case 4:
-                                include('pages/veicoli.php');
-                                break;
-                            case 5:
-                                include('pages/accessi.php');
-                                break;
-                            case 6:
-                                include('pages/statistiche.php');
-                                break;
-                            case 7:
-                                include('pages/profilo.php');
-                                break;
-                            case 8:
-                                include('pages/inserisci_richiesta.php');
-                                break;
-                            case 9:
-                                include('pages/inserisci_veicolo.php');
-                                break;
-                            default:
-                                include('pages/index.php');
-                                break;
-                        }
-                    }
-                    ?>
+                    <?php Components::main_content() ?>
                 </div>
                 <!-- /.container-fluid -->
 
@@ -342,6 +242,17 @@ if (!$logged){
         </div>
     </div>
 
+    <!-- Toast -->
+    <div class="toast-container position-fixed p-3" style="bottom: 0; right: 0;">
+        <div id="liveToast" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header justify-content-between">
+                <strong class="me-auto" id="toast-title">sdfvsdfv</strong>
+                <button type="button" class="fa fa-close" onclick="document.getElementById('liveToast').classList.remove('show')" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast-body">sdfvsdfv</div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -353,20 +264,11 @@ if (!$logged){
     <script src="js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-    <script src="js/demo/chart-bar-demo.js"></script>
-
-    <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="js/datatables-demo.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
-    <script src="js/richiesta.js"></script>
+    <script src="js/toast.js"></script>
 
 </body>
 </html>

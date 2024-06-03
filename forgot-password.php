@@ -8,8 +8,8 @@ if(isset($_POST['email'])){
 	if($_POST['email']==""){
 		$errore=1;
 	}else{
-        $db = new Database();
-		$result=$db -> execute_query("SELECT UTENTI.ID AS Id, UTENTI.PASSWORD AS Password FROM UTENTI WHERE email='".$_POST['email']."' limit 1");
+        
+		$result= Database::query("SELECT UTENTI.ID AS Id, UTENTI.PASSWORD AS Password FROM UTENTI WHERE email='".$_POST['email']."' limit 1");
 		if($result->num_rows === 1){
             $row = $result -> fetch_assoc();
 			//l’hash ci servirà per recuperare i dati utente e confermare la richiesta

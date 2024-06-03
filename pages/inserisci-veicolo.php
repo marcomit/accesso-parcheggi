@@ -1,12 +1,10 @@
 <?php
-require_once(__DIR__ . '/../database.php');
-$db = new Database();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $targa = $_POST['targa'];
     $modello = $_POST['modello'];
     $tipologia = $_POST['tipologia'];
-    $db->execute_query("INSERT INTO VEICOLI(TARGA, MODELLO, ID_TIPO, ID_UTENTE) VALUES ('$targa', '$modello', '$tipologia', " . $_SESSION['user']['ID'] . ")");
+    Database::query("INSERT INTO VEICOLI(TARGA, MODELLO, ID_TIPO, ID_UTENTE) VALUES ('$targa', '$modello', '$tipologia', " . $_SESSION['user']['ID'] . ")");
 }
 ?>
 <!-- Page Heading -->
@@ -35,7 +33,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <label for="tipologia">Tipologia</label>
                 <select name="tipologia" class="form-select form-control form-control-user" aria-label="Default select example">
                     <?php 
-                        $tipologie = $db->execute_query("SELECT * FROM TIPI_VEICOLO");
+                        $tipologie = Database::query("SELECT * FROM TIPI_VEICOLO");
                         while($tipologia = $tipologie->fetch_assoc()):
                     ?>
                         <option value="<?= $tipologia["ID"] ?>"><?= $tipologia["DESCRIZIONE"] ?></option>

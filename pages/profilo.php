@@ -1,7 +1,5 @@
 <?php
-require_once('database.php');
-$db = new Database();
-$profilo = $db->execute_query("SELECT RUOLI.DESCRIZIONE AS Ruolo, UTENTI.NOME AS Nome, UTENTI.COGNOME AS Cognome, UTENTI.EMAIL AS Email, UTENTI.CODICE_FISCALE AS CF, UTENTI.TELEFONO AS Telefono FROM UTENTI, RUOLI 
+$profilo = Database::query("SELECT RUOLI.DESCRIZIONE AS Ruolo, UTENTI.NOME AS Nome, UTENTI.COGNOME AS Cognome, UTENTI.EMAIL AS Email, UTENTI.CODICE_FISCALE AS CF, UTENTI.TELEFONO AS Telefono FROM UTENTI, RUOLI 
 WHERE UTENTI.ID_RUOLO = RUOLI.ID AND UTENTI.ID = " . $_SESSION['user']['ID'])->fetch_assoc();
 ?>
 

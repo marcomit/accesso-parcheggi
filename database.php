@@ -2,14 +2,13 @@
 
 class Database
 {
-    protected $conn;
+    protected static  $conn;
 
-    public function __construct(){
-        $this->conn = new mysqli("localhost", "root", "", "info5bia_targhe");
+    public static function connect(){
+        self::$conn = new mysqli("localhost", "root", "root", "info5bia_targhe");
     }
 
-    public function execute_query(string $sql){
-        $result = $this->conn->query($sql);
-        return $result;
+    public static function query(string $sql){
+        return self::$conn->query($sql);
     }
 }

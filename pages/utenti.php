@@ -1,17 +1,15 @@
 <?php
-require_once('database.php');
 if($_SESSION['user']['RUOLO'] === "ADMIN")
 {
-    $db = new Database();
     if(isset($_POST['ruolo']) & isset($_POST['utente'])){ 
-      $db -> execute_query("UPDATE UTENTI SET UTENTI.ID_RUOLO = ".$_POST['ruolo']." WHERE ID = ".$_POST['utente']."");
+      Database::query("UPDATE UTENTI SET UTENTI.ID_RUOLO = ".$_POST['ruolo']." WHERE ID = ".$_POST['utente']."");
     }
-    $utenti = $db->execute_query("SELECT RUOLI.DESCRIZIONE AS Ruolo, UTENTI.ID AS ID, UTENTI.NOME AS Nome, UTENTI.COGNOME AS Cognome, UTENTI.EMAIL AS Email, UTENTI.CODICE_FISCALE AS CF, UTENTI.TELEFONO AS Telefono FROM UTENTI JOIN RUOLI ON UTENTI.ID_RUOLO = RUOLI.ID");
+    $utenti = Database::query("SELECT RUOLI.DESCRIZIONE AS Ruolo, UTENTI.ID AS ID, UTENTI.NOME AS Nome, UTENTI.COGNOME AS Cognome, UTENTI.EMAIL AS Email, UTENTI.CODICE_FISCALE AS CF, UTENTI.TELEFONO AS Telefono FROM UTENTI JOIN RUOLI ON UTENTI.ID_RUOLO = RUOLI.ID");
 }
 else{
     http_response_code(404);
-        include('404.html');
-        exit;
+    include('404.html');
+    exit;
 }
 ?> 
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -29,8 +27,7 @@ else{
                     <div class="form-group" method="POST" action="">
                         <select name="ruolo" class="py-2 form-select form-control form-control-user" aria-label="Default select example">
                         <?php 
-                        $db = new Database();
-                        $SelezioneRuoli = $db ->execute_query("SELECT RUOLI.ID AS ID, RUOLI.DESCRIZIONE AS Ruolo FROM RUOLI");
+                        $SelezioneRuoli = Database::query("SELECT RUOLI.ID AS ID, RUOLI.DESCRIZIONE AS Ruolo FROM RUOLI");
                                 while($Ruolo = $SelezioneRuoli->fetch_assoc()):
                             ?>
                                 <option name="ruolo" value="<?= $Ruolo["ID"]?>"><?= $Ruolo["Ruolo"]?></option>

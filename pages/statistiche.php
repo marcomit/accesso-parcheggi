@@ -23,11 +23,11 @@
 
 <?php
 require_once(__DIR__ . '/../database.php');
-$db = new Database();
+Database::connect();
 
 
 // Esegui la query
-$result = $db->execute_query('SELECT COUNT(*) AS NumeroPersonale FROM UTENTI WHERE UTENTI.ID_RUOLO = 3');
+$result = Database::query('SELECT COUNT(*) AS NumeroPersonale FROM UTENTI WHERE UTENTI.ID_RUOLO = 3');
 
 if ($result) {
     $row = $result->fetch_assoc();
@@ -41,7 +41,7 @@ if ($result) {
     $numeroPersonale = 0; // Valore predefinito in caso di errore
 }
 
-$result1 = $db->execute_query('SELECT COUNT(*) AS NumeroDocenti FROM UTENTI WHERE UTENTI.ID_RUOLO = 2');
+$result1 = Database::query('SELECT COUNT(*) AS NumeroDocenti FROM UTENTI WHERE UTENTI.ID_RUOLO = 2');
 
 if ($result1) {
     $row1 = $result1->fetch_assoc();
@@ -55,7 +55,7 @@ if ($result1) {
     $numeroDocenti = 0; // Valore predefinito in caso di errore
 }
 
-$result2 = $db->execute_query('SELECT COUNT(*) AS NumeroEsterni FROM UTENTI WHERE UTENTI.ID_RUOLO = 1');
+$result2 = Database::query('SELECT COUNT(*) AS NumeroEsterni FROM UTENTI WHERE UTENTI.ID_RUOLO = 1');
 
 if ($result2) {
     $row2 = $result2->fetch_assoc();
@@ -266,13 +266,13 @@ if ($result2) {
             type: 'pie',
             data: {
                 labels: [<?php 
-                    $result = $db->execute_query("SELECT * FROM RUOLI");
+                    $result = Database::query("SELECT * FROM RUOLI");
                     while($ruolo = $result->fetch_assoc()):
                     ?>'<?= $ruolo['DESCRIZIONE'] ?>',<?php endwhile;?>],
                 datasets: [{
                     label: 'Accessi Totali',
                     data: [<?php 
-                    $result = $db->execute_query(
+                    $result = Database::query(
                         "SELECT COUNT(*) AS C FROM RUOLI
                         INNER JOIN UTENTI ON UTENTI.ID_RUOLO = RUOLI.ID
                         INNER JOIN VEICOLI ON VEICOLI.ID_UTENTE = UTENTI.ID

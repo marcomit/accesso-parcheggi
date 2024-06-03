@@ -19,12 +19,12 @@ if(isset($_GET['hash'])){
 	$hash=$_GET['hash'];
 	$id=substr($hash, 32);
 	$password_old=substr($hash, 0, 32);
-	$db = new Database();
+	Database::connect();
 
 	$password=random(8); //nuova password di 8 caratteri
 	
 	//controllo che i valori dell’hash corrispondano ai valori salvati nel database
-	$result=$db -> execute_query("SELECT UTENTI.ID AS ID, UTENTI.PASSWORD FROM UTENTI");
+	$result=Database::query("SELECT UTENTI.ID AS ID, UTENTI.PASSWORD FROM UTENTI");
 	
 	if($result->num_rows === 1){ 
 	

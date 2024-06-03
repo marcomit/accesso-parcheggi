@@ -1,16 +1,12 @@
 <?php
-require_once(__DIR__ . '/../database.php');
-$db = new Database();
-
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     updateRequestStatus($_POST['id_richiesta'], $_POST['stato']);
 }
 function updateRequestStatus($id, $stato) {
-    global $db;
     $stato = $_POST['stato'] === 'SI' ? 1 : 0;
 
     $id = $_POST['id_richiesta'];
-    $result = $db->execute_query("UPDATE AUTORIZZAZIONI SET STATO_RICHIESTA = $stato WHERE ID = $id");
+    $result = Database::query("UPDATE AUTORIZZAZIONI SET STATO_RICHIESTA = $stato WHERE ID = $id");
 
     if(!$result){
         return "Errore durante l'aggiornamento dello stato della richiesta";
@@ -27,7 +23,7 @@ $query = "SELECT AUTORIZZAZIONI.ID, AUTORIZZAZIONI.INIZIO, AUTORIZZAZIONI.FINE, 
 if ($_SESSION['user']['RUOLO'] !== "ADMIN") {
     $query .= " AND UTENTI.ID = " . intval($_SESSION['user']['ID']);
 }
-$autorizzazioni = $db->execute_query($query);
+$autorizzazioni = Database::query($query);
 ?>
 
 <!-- Page Heading -->
@@ -36,7 +32,7 @@ $autorizzazioni = $db->execute_query($query);
     <div>
         <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-retweet fa-sm"></i></a>
-        <a href="index.php?page_id=8" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+        <a href="index.php?page_id=9" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-plus fa-sm text-white-50"></i> Invia richiesta</a>
     </div>
 </div>
@@ -62,13 +58,7 @@ $autorizzazioni = $db->execute_query($query);
                     <?php while($autorizzazione = $autorizzazioni->fetch_assoc()): ?>
                         <tr data-autorizzazione="<?= $autorizzazione['ID'] ?>">
                             <td class="text-primary" data-toggle="modal" data-target="#requestStatus">
-                                <?php 
-                                $stato = $autorizzazione['STATO_RICHIESTA'] == null ? 'Pendente' : ($autorizzazione['STATO_RICHIESTA'] ? 'Accettata' : 'Rifiutata');
-                                if($_SESSION['user']['RUOLO'] !== "ADMIN"): ?>
-                                    <a href="index.php?page_id=8&id_richiesta=<?= $autorizzazione['ID'] ?>">Modifica</a>
-                                <?php else: ?>
-                                    <a href="index.php?page_id=8&id_richiesta=<?= $autorizzazione['ID'] ?>">Modifica</a>
-                                <?php endif ?>
+                                <a href="index.php?page_id=9&id_richiesta=<?= $autorizzazione['ID'] ?>">Modifica</a>
                             </td>
                             <?php if($_SESSION['user']['RUOLO'] === "ADMIN"):?> <td><?= $autorizzazione['NOME'] . " - " . $autorizzazione['COGNOME'] ?></td> <?php endif ?>
                             <td><?= $autorizzazione['TARGA'] . ' - ' . $autorizzazione['MODELLO'] ?></td>

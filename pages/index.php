@@ -1,17 +1,18 @@
 <?php
+$POSTI_TOTALI = 120;
+
 $auto_presenti = Database::query("SELECT COUNT(*) AS C FROM ACCESSI_VEICOLO WHERE USCITA IS NULL")->fetch_assoc()['C'];
 $autorizzazioni_attive = Database::query("SELECT COUNT(*) AS C FROM AUTORIZZAZIONI WHERE NOW() BETWEEN INIZIO AND FINE AND STATO_RICHIESTA = 1")->fetch_assoc()['C'];
 $richieste_pendenti = Database::query("SELECT COUNT(*) AS C FROM AUTORIZZAZIONI WHERE STATO_RICHIESTA IS NULL")->fetch_assoc()['C'];
-$posti_occupati = Database::query("SELECT COUNT(*) AS C FROM ACCESSI_VEICOLO WHERE USCITA IS NULL")->fetch_assoc()['C'];
 
 Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outline-primary");
 ?>
 
 <div class="row">
     <?php
-    Components::card("Auto presenti", $auto_presenti, "fa-car");
+    Components::card("Posti liberi", $POSTI_TOTALI - $auto_presenti, "fa-car");
     Components::card("Autorizzazioni attive", $autorizzazioni_attive, "fa-dollar-sign", "success");
-    Components::card("Riempimento parcheggio", $posti_occupati, "fa-clipboard-list", "info", 50);
+    Components::card("Riempimento parcheggio", $auto_presenti . "%", "fa-clipboard-list", "info", intval($auto_presenti * 100 / $POSTI_TOTALI));
     Components::card("Autorizzazioni pendenti", $richieste_pendenti, "fa-comments", "warning");
      ?>
 </div>
@@ -20,11 +21,8 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
 <?php Components::heading("Grafici di oggi") ?>
 
 <div class="row">
-
-    <!-- Area Chart -->
     <div class="col-xl-8 col-lg-7">
         <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
             <div
                 class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Accessi per ora</h6>
@@ -43,11 +41,10 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
                     </div>
                 </div>
             </div>
-            <!-- Card Body -->
             <div class="card-body">
                 <div class="chart-area">
-                    <canvas id="myAreaChart"></canvas>
-                    <?= Chart::area("myAreaChart", 
+                    <canvas id="todayBarChart"></canvas>
+                    <?= Chart::bar("todayBarChart",
                     "SELECT HOUR(USCITA) AS H, COUNT(*) AS C
                     FROM ACCESSI_VEICOLO
                     WHERE USCITA IS NOT NULL AND DAY(USCITA) = DAY(NOW())

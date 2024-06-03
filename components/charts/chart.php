@@ -39,7 +39,7 @@ class Chart{
             });
         </script>
     <?php }
-    public static function bar(string $target, string $query, string $label, string $data, string $point_label){
+    public static function bar(string $target, string $query, string $label, string $data, string $point_label, ?callable $formatKey = null, ?callable $formatValue = null){
         $result = Database::query($query);
         $values = array();
         while($item = $result->fetch_assoc()){
@@ -50,13 +50,14 @@ class Chart{
             new Chart(document.getElementById("<?= $target ?>"), {
             type: 'bar',
             data: {
-                labels: [<?php foreach($values as $key => $value): ?>"<?= $key ?>",<?php endforeach ?>],
+                labels: [<?php foreach($values as $key => $value): ?>"<?= $formatKey === null ? $key : $formatKey($key) ?>",<?php endforeach ?>],
                 datasets: [{
-                label: "<?= $point_label ?>",
-                backgroundColor: "#4e73df",
-                hoverBackgroundColor: "#2e59d9",
-                borderColor: "#4e73df",
-                data: [<?php foreach($values as $key => $value): ?><?= $value ?>,<?php endforeach ?>],
+                    label: "<?= $point_label ?>",
+                    backgroundColor: "#4e73df",
+                    hoverBackgroundColor: "#2e59d9",
+                    borderColor: "#4e73df",
+                    data: [<?php foreach($values as $key => $value): ?><?= $formatValue === null ? $value : $formatValue($value) ?>,<?php endforeach ?>],
+                    maxBarThickness: 40,
                 }],
             },
             options: {
@@ -81,17 +82,16 @@ class Chart{
                     ticks: {
                     maxTicksLimit: 6
                     },
-                    maxBarThickness: 25,
                 }],
                 yAxes: [{
                     ticks: {
                     min: 0,
-                    max: 15000,
+                    //max: 15000,
                     maxTicksLimit: 5,
                     padding: 10,
                     // Include a dollar sign in the ticks
                     callback: function(value, index, values) {
-                        return '$' + value;
+                        return parseInt(value);
                     }
                     },
                     gridLines: {

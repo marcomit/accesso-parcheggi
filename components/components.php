@@ -106,6 +106,9 @@ class Components{
             case 9:
                 include('pages/inserisci-richiesta.php');
                 break;
+            case 10:
+                include('pages/inserisci-utente.php');
+                break;
             default:
                 include('pages/index.php');
                 break;

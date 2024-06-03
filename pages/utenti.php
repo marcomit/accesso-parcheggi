@@ -1,8 +1,12 @@
 <?php
 if($_SESSION['user']['RUOLO'] === "ADMIN")
 {
-    if(isset($_POST['ruolo']) & isset($_POST['utente'])){ 
+    if(isset($_POST['ruolo']) &  isset($_POST['utente'])){ 
       Database::query("UPDATE UTENTI SET UTENTI.ID_RUOLO = ".$_POST['ruolo']." WHERE ID = ".$_POST['utente']."");
+    }
+    else if(isset($_POST['utente']) & $_POST['fun'] == "DEL")
+    {
+        Database::query("DELETE FROM UTENTI WHERE UTENTI.ID = ".$_POST['utente'] );
     }
     $utenti = Database::query("SELECT RUOLI.DESCRIZIONE AS Ruolo, UTENTI.ID AS ID, UTENTI.NOME AS Nome, UTENTI.COGNOME AS Cognome, UTENTI.EMAIL AS Email, UTENTI.CODICE_FISCALE AS CF, UTENTI.TELEFONO AS Telefono FROM UTENTI JOIN RUOLI ON UTENTI.ID_RUOLO = RUOLI.ID");
 }
@@ -11,8 +15,8 @@ else{
     include('404.html');
     exit;
 }
-?> 
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+Components::heading("", "fas fa-plus", "Aggiungi Utente", "index.php?page_id=10", "btn btn-primary") ?>
+<div class="modal fade" id="Modify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form method="post" action="">
@@ -34,7 +38,7 @@ else{
                             <?php endwhile; ?>   
                         </select>
                         
-                        <input type="hidden" value="" id="utente" name="utente" required>
+                        <input type="hidden" value="" id="idUtente" name="utente" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -45,14 +49,44 @@ else{
         </div>
     </div>
 </div>
+<div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" action="">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Rimuovi utente</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <input type="hidden" value="" id="idUtenteDel" name="utente" required>
+                <input type="hidden" name="fun" value="DEL">
+                    <h4 id="h1-remove">
+
+                    </h1>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-helper" type="button" data-dismiss="modal">Annulla</button>
+                    <input class="btn btn-danger" type="submit" value="Elimina Utente"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
 <!-- Page Heading -->
 
 <?php if($_SESSION['user']['RUOLO'] === "ADMIN"): ?> 
-<div class="container mt-5">
 
-<h1>Lista Utenti <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm p-2" data-toggle="modal" data-target="#logoutModal">Modifica Ruolo</a>
+<div class="container mt-5">
+<h1>Lista Utenti</h1>
+<div id="tastiModificaElimina" style="display:none; " class="p-2"> 
+ <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm p-2" data-toggle="modal" data-target="#Modify">Modifica Ruolo</a> 
+<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm p-2" data-toggle="modal" data-target="#Delete">Elimina utente</a>
+</div>
 </h1>
 
 <table class="table table-bordered" id="dataTable">
@@ -69,7 +103,7 @@ else{
     <tbody>
         <?php while($utente = $utenti->fetch_assoc()): ?>
             <tr>
-                <td><input class="text-center" type="radio" onclick="assegnaValore(this.value)" name="utente" value="<?= $utente['ID']?>"/>
+                <td><input class="text-center" type="radio" onclick="assegnaValore(this.value)" name="utente" value="<?= $utente['ID']."-".$utente['Nome']."-".$utente['Cognome']."-".$utente['CF']?>"/>
                 <?php echo ($utente['Ruolo']); ?></td>
                 <td><?php echo ($utente['Nome']); ?></td>
                 <td><?php echo ($utente['Cognome']); ?></td>
@@ -84,6 +118,12 @@ else{
 <?php endif?> 
 <script>
     function assegnaValore(valore){
-        document.getElementById('utente').value = valore;
+        document.getElementById('tastiModificaElimina').style.display = "block";
+        let array = valore.split("-");
+        document.getElementById('h1-remove').textContent="Vuoi eliminare l'utente " + array[1] + " " + array[2]
+        + " " + array[3] + "?";
+        document.getElementById('idUtente').value = array[0];
+        document.getElementById('idUtenteDel').value = array[0];
+
     }
 </script>

@@ -253,6 +253,7 @@ if (!$logged){
         </div>
     </div>
 
+    <script src="js/toast.js"></script>
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -267,8 +268,5 @@ if (!$logged){
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="js/datatables-demo.js"></script>
-
-    <script src="js/toast.js"></script>
-
 </body>
 </html>

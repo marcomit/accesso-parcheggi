@@ -158,11 +158,13 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
                 <div class="chart-pie pt-4 pb-2">
                     <canvas id="pie-chart"></canvas>
                     <?php Chart::pie("pie-chart",
-                    "SELECT RUOLI.DESCRIZIONE AS RUOLO, COUNT(*) AS C
+                    "SELECT RUOLI.DESCRIZIONE AS RUOLO, COALESCE(COUNT(ACCESSI_VEICOLO.ID), 0) AS C
                     FROM RUOLI
-                    INNER JOIN UTENTI ON UTENTI.ID_RUOLO = RUOLI.ID
-                    INNER JOIN VEICOLI ON VEICOLI.ID_UTENTE = UTENTI.ID
-                    GROUP BY RUOLI.DESCRIZIONE", "RUOLO", "C") ?>
+                    LEFT JOIN UTENTI ON UTENTI.ID_RUOLO = RUOLI.ID
+                    LEFT JOIN VEICOLI ON VEICOLI.ID_UTENTE = UTENTI.ID
+                    LEFT JOIN ACCESSI_VEICOLO ON ACCESSI_VEICOLO.ID_VEICOLO = VEICOLI.ID
+                    GROUP BY RUOLI.ID, RUOLI.DESCRIZIONE
+                    ORDER BY RUOLI.DESCRIZIONE", "RUOLO", "C") ?>
                 </div>
                 <div class="mt-4 text-center small">
                     <span class="mr-2">

@@ -29,13 +29,13 @@ function validateRegistration(): string {
 
     include('database.php');   
     
-    $db = new Database();
+    Database::connect();
     
-    if($db->execute_query("SELECT *FROM UTENTI WHERE EMAIL = '$email' LIMIT 1")->num_rows > 0){
+    if(Database::query("SELECT *FROM UTENTI WHERE EMAIL = '$email' LIMIT 1")->num_rows > 0){
         return "This email is already registered!";
     }
 
-    $result = $db->execute_query(
+    $result = Database::query(
         "INSERT INTO UTENTI(NOME, COGNOME, EMAIL, PASSWORD, CODICE_FISCALE, TELEFONO, ID_RUOLO)
         VALUES ('$first_name', '$last_name', '$email', '" . hash("sha256", $password) . "', '$fiscal_code', '$telephone', 1)");
 

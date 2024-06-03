@@ -1,10 +1,9 @@
 <?php
 
 require_once('database.php');
+Database::connect();
 
-$db = new Database();
-
-$preavvisi = $db->execute_query(
+$preavvisi = Database::query(
     "SELECT UTENTI.EMAIL, VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO FROM AUTORIZZAZIONI
     INNER JOIN VEICOLI ON AUTORIZZAZIONI.ID_VEICOLO = VEICOLI.ID
     INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO

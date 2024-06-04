@@ -12,7 +12,7 @@ if($_SESSION['user']['RUOLO'] === "ADMIN")
 }
 
 if($_SESSION['user']['RUOLO'] === "ADMIN"):
-Components::heading("", "fas fa-plus", "Aggiungi Utente", "index.php?page_id=10", "btn btn-primary") ?>
+Components::heading("", "fas fa-plus", "Aggiungi Utente", "index.php?page_id=2", "btn btn-primary") ?>
 <div class="modal fade" id="Modify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

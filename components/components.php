@@ -9,15 +9,20 @@ class Components{
         [
             "name" => "Utenti",
             "icon" => "fa fa-user",
-            "require_admin" => true
+            "require_admin" => true,
+            "sub_items" => [
+                ["name" => "Utenti"],
+                ["name" => "Nuovo", "icon" => "fas fa-plus fa-sm"]
+            ]
         ],
         [
             "name" => "Autorizzazioni",
             "icon" => "fas fa-check",
             "require_admin" => false,
             "sub_items" => [
-                ["name" => "Autorizzazioni", "icon" => ""],
-                ["name" => "Richieste", "icon" => ""],
+                ["name" => "Autorizzazioni"],
+                ["name" => "Richieste"],
+                ["name" => "Nuovo", "icon" => " fas fa-plus fa-sm"],
             ]
         ],
         [
@@ -32,11 +37,6 @@ class Components{
         [
             "name" => "Accessi",
             "icon" => "fa fa-car",
-            "require_admin" => false
-        ],
-        [
-            "name" => "Statistiche",
-            "icon" => "fas fa-fw fa-chart-area",
             "require_admin" => false
         ]
     ];
@@ -56,7 +56,7 @@ class Components{
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <?php foreach($item["sub_items"] as $sub_item): $current_idx++?>
                                     <a class="collapse-item" href="index.php?page_id=<?= $current_idx - 1 ?>">
-                                        <i class="<?= $sub_item["icon"] ?> text-dark-50"></i>
+                                        <?php if(isset($sub_item["icon"])): ?><i class="<?= $sub_item["icon"] ?> text-dark-50"></i><?php endif ?>
                                         <?= $sub_item["name"] ?>
                                     </a>
                                 <?php endforeach; ?>
@@ -71,7 +71,7 @@ class Components{
                             <span><?= $item["name"] ?></span>
                         </a>
                     </li>
-        <?php endif; else: $current_idx++; endif; endforeach;
+        <?php endif; else: $current_idx = $current_idx + count($item["sub_items"]); endif; endforeach;
 
     }  
     public static function main_content(){
@@ -83,31 +83,28 @@ class Components{
                 include('pages/utenti.php');
                 break;
             case 2:
-                include('pages/autorizzazioni.php');
+                include('pages/inserisci-utente.php');
                 break;
             case 3:
-                include('pages/richieste.php');
+                include('pages/autorizzazioni.php');
                 break;
             case 4:
-                include('pages/veicoli.php');
+                include('pages/richieste.php');
                 break;
             case 5:
-                include('pages/inserisci-veicolo.php');
-                break;
-            case 6:
-                include('pages/accessi.php');
-                break;
-            case 7:
-                include('pages/statistiche.php');
-                break;
-            case 8:
-                include('pages/profilo.php');
-                break;
-            case 9:
                 include('pages/inserisci-richiesta.php');
                 break;
-            case 10:
-                include('pages/inserisci-utente.php');
+            case 6:
+                include('pages/veicoli.php');
+                break;
+            case 7:
+                include('pages/inserisci-veicolo.php');
+                break;
+            case 8:
+                include('pages/accessi.php');
+                break;
+            case 9:
+                include('pages/profilo.php');
                 break;
             default:
                 include('pages/index.php');

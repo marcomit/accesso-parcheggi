@@ -1,0 +1,396 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:8889
+-- Creato il: Giu 04, 2024 alle 14:20
+-- Versione del server: 5.7.39
+-- Versione PHP: 8.2.0
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `info5bia_targhe`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `ACCESSI_UTENTE`
+--
+
+CREATE TABLE `ACCESSI_UTENTE` (
+  `ID` int(11) NOT NULL,
+  `DATA` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ID_UTENTE` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dump dei dati per la tabella `ACCESSI_UTENTE`
+--
+
+INSERT INTO `ACCESSI_UTENTE` (`ID`, `DATA`, `ID_UTENTE`) VALUES
+(18, '2024-06-02 11:52:50', 7),
+(19, '2024-06-02 12:05:50', 8),
+(20, '2024-06-02 12:06:21', 8),
+(21, '2024-06-02 12:07:52', 7),
+(22, '2024-06-02 12:29:08', 8),
+(23, '2024-06-02 19:50:02', 7),
+(24, '2024-06-02 20:01:18', 8),
+(25, '2024-06-02 20:48:15', 7),
+(26, '2024-06-02 22:07:26', 8),
+(27, '2024-06-02 22:09:37', 7),
+(28, '2024-06-03 11:08:32', 7),
+(29, '2024-06-03 11:13:22', 8),
+(30, '2024-06-03 11:20:28', 7),
+(31, '2024-06-03 11:25:42', 8),
+(32, '2024-06-03 16:04:16', 7),
+(33, '2024-06-03 16:22:37', 8),
+(34, '2024-06-03 16:24:50', 9),
+(35, '2024-06-03 19:52:27', 7),
+(36, '2024-06-03 21:20:29', 8),
+(37, '2024-06-04 07:28:00', 7),
+(38, '2024-06-04 13:46:00', 8),
+(39, '2024-06-04 15:10:43', 7),
+(40, '2024-06-04 16:10:05', 7),
+(41, '2024-06-04 16:10:28', 8);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `ACCESSI_VEICOLO`
+--
+
+CREATE TABLE `ACCESSI_VEICOLO` (
+  `ID` int(11) NOT NULL,
+  `ENTRATA` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `USCITA` datetime DEFAULT NULL,
+  `ID_VEICOLO` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dump dei dati per la tabella `ACCESSI_VEICOLO`
+--
+
+INSERT INTO `ACCESSI_VEICOLO` (`ID`, `ENTRATA`, `USCITA`, `ID_VEICOLO`) VALUES
+(1, '2024-06-01 08:00:00', '2024-06-01 10:00:00', 6),
+(2, '2024-06-02 09:15:00', '2024-06-02 11:30:00', 6),
+(3, '2024-06-03 07:45:00', '2024-06-03 09:45:00', 7),
+(5, '2024-06-05 06:30:00', '2024-06-05 08:30:00', 8),
+(6, '2024-06-06 12:00:00', '2024-06-06 14:15:00', 8),
+(7, '2024-06-07 10:30:00', '2024-06-07 12:45:00', 9),
+(8, '2024-06-08 11:00:00', '2024-06-08 13:00:00', 9),
+(9, '2024-06-09 08:15:00', '2024-06-09 10:30:00', 10),
+(10, '2024-06-10 09:00:00', '2024-06-10 11:15:00', 10),
+(11, '2024-06-11 14:00:00', '2024-06-11 16:00:00', 11),
+(12, '2024-06-12 13:00:00', '2024-06-12 15:00:00', 11),
+(13, '2024-06-13 15:30:00', '2024-06-13 17:30:00', 12),
+(14, '2024-06-14 16:00:00', '2024-06-14 18:00:00', 12),
+(15, '2024-06-15 17:00:00', '2024-06-15 19:00:00', 13),
+(16, '2024-06-03 08:00:00', '2024-06-03 10:00:00', 6),
+(17, '2024-06-03 10:15:00', '2024-06-03 12:30:00', 7),
+(18, '2024-06-03 13:00:00', '2024-06-03 15:00:00', 8),
+(19, '2024-06-03 15:30:00', '2024-06-03 17:30:00', 9),
+(20, '2024-06-03 18:00:00', '2024-06-03 20:00:00', 10),
+(21, '2024-06-04 08:00:00', NULL, 6),
+(22, '2024-06-04 09:00:00', NULL, 7),
+(23, '2024-06-04 10:00:00', NULL, 8),
+(24, '2024-06-04 00:00:00', NULL, 9),
+(25, '2024-06-04 06:58:00', NULL, 10),
+(26, '2024-06-04 00:00:00', NULL, 11),
+(27, '2024-06-03 14:00:00', NULL, 12),
+(28, '2024-06-03 15:00:00', NULL, 13),
+(29, '2024-06-03 16:00:00', NULL, 6),
+(30, '2024-06-03 17:00:00', NULL, 7),
+(31, '2024-06-04 08:00:00', NULL, 6),
+(32, '2024-06-04 09:00:00', NULL, 7),
+(33, '2024-06-04 10:00:00', NULL, 8),
+(34, '2024-06-04 11:00:00', NULL, 9),
+(35, '2024-06-04 12:00:00', NULL, 10),
+(36, '2024-06-04 13:00:00', NULL, 11),
+(37, '2024-06-04 14:00:00', NULL, 12),
+(38, '2024-06-04 15:00:00', NULL, 13),
+(39, '2024-06-04 16:00:00', NULL, 6),
+(40, '2024-06-04 17:00:00', NULL, 7);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `AUTORIZZAZIONI`
+--
+
+CREATE TABLE `AUTORIZZAZIONI` (
+  `ID` int(11) NOT NULL,
+  `INIZIO` datetime NOT NULL,
+  `FINE` datetime NOT NULL,
+  `ID_VEICOLO` int(11) NOT NULL,
+  `STATO_RICHIESTA` tinyint(1) DEFAULT NULL,
+  `ID_ADMIN` int(11) DEFAULT NULL,
+  `DATA_RISPOSTA` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dump dei dati per la tabella `AUTORIZZAZIONI`
+--
+
+INSERT INTO `AUTORIZZAZIONI` (`ID`, `INIZIO`, `FINE`, `ID_VEICOLO`, `STATO_RICHIESTA`, `ID_ADMIN`, `DATA_RISPOSTA`) VALUES
+(17, '2024-06-02 00:00:00', '2024-06-11 00:00:00', 8, 1, 8, NULL),
+(18, '2024-06-02 00:00:00', '2024-06-11 00:00:00', 9, 1, 8, NULL),
+(19, '2024-06-02 00:00:00', '2024-06-11 00:00:00', 9, 1, 8, NULL),
+(20, '2024-06-02 00:00:00', '2024-06-11 00:00:00', 8, 1, 8, NULL),
+(21, '2024-06-02 00:00:00', '2024-06-19 00:00:00', 9, 1, 8, NULL),
+(22, '2024-06-02 00:00:00', '2024-06-19 00:00:00', 9, NULL, NULL, NULL),
+(23, '2024-06-02 00:00:00', '2024-06-09 00:00:00', 8, 0, 8, NULL),
+(24, '2024-06-22 00:00:00', '2024-06-30 00:00:00', 6, NULL, NULL, NULL),
+(25, '2024-06-03 00:00:00', '2024-06-10 00:00:00', 13, 1, 8, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `RUOLI`
+--
+
+CREATE TABLE `RUOLI` (
+  `ID` int(11) NOT NULL,
+  `DESCRIZIONE` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dump dei dati per la tabella `RUOLI`
+--
+
+INSERT INTO `RUOLI` (`ID`, `DESCRIZIONE`) VALUES
+(1, 'STUDENTE'),
+(2, 'DOCENTE'),
+(3, 'PERSONALE'),
+(4, 'ALTRO'),
+(5, 'ADMIN');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `TIPI_VEICOLO`
+--
+
+CREATE TABLE `TIPI_VEICOLO` (
+  `ID` int(11) NOT NULL,
+  `DESCRIZIONE` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dump dei dati per la tabella `TIPI_VEICOLO`
+--
+
+INSERT INTO `TIPI_VEICOLO` (`ID`, `DESCRIZIONE`) VALUES
+(1, 'MOTORINO'),
+(2, 'AUTO'),
+(3, 'AUTOCARRO');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `UTENTI`
+--
+
+CREATE TABLE `UTENTI` (
+  `ID` int(11) NOT NULL,
+  `NOME` varchar(256) NOT NULL,
+  `COGNOME` varchar(256) NOT NULL,
+  `TELEFONO` varchar(256) NOT NULL,
+  `CODICE_FISCALE` varchar(16) NOT NULL,
+  `EMAIL` varchar(256) NOT NULL,
+  `PASSWORD` varchar(256) NOT NULL,
+  `ID_RUOLO` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dump dei dati per la tabella `UTENTI`
+--
+
+INSERT INTO `UTENTI` (`ID`, `NOME`, `COGNOME`, `TELEFONO`, `CODICE_FISCALE`, `EMAIL`, `PASSWORD`, `ID_RUOLO`) VALUES
+(7, 'marco', 'menegazzi', '3895092747', 'MNGMRC05P21B114M', 'marcomenegazzi.05@gmail.com', 'd8722286db75e0a63be15212d47f687c3cbf9802a3012a39519a04ca87e69691', 2),
+(8, 'pippo', 'pippo', '3895092747', 'MNGMRC05P21B114M', 'pippo@pippo.it', 'd8722286db75e0a63be15212d47f687c3cbf9802a3012a39519a04ca87e69691', 5),
+(9, 'pluto', 'pluto', '3895092747', 'MNGMRC05P21B114M', 'pluto@pluto.it', 'd8722286db75e0a63be15212d47f687c3cbf9802a3012a39519a04ca87e69691', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `VEICOLI`
+--
+
+CREATE TABLE `VEICOLI` (
+  `ID` int(11) NOT NULL,
+  `TARGA` varchar(7) NOT NULL,
+  `MODELLO` varchar(256) NOT NULL,
+  `ID_TIPO` int(11) NOT NULL,
+  `ID_UTENTE` int(11) NOT NULL,
+  `SALVATO` tinyint(1) NOT NULL DEFAULT '0',
+  `ID_ADMIN` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dump dei dati per la tabella `VEICOLI`
+--
+
+INSERT INTO `VEICOLI` (`ID`, `TARGA`, `MODELLO`, `ID_TIPO`, `ID_UTENTE`, `SALVATO`, `ID_ADMIN`) VALUES
+(6, 'AA555AA', 'fiat', 1, 8, 0, NULL),
+(7, 'BB111BB', 'FERRARI', 2, 8, 0, NULL),
+(8, 'CC666CC', 'RENAULT', 2, 7, 1, 8),
+(9, 'DD999DD', 'BUGATTI', 1, 7, 1, 8),
+(10, 'AA000AA', 'mdmdmd', 2, 7, 0, NULL),
+(11, 'AA000AA', 'dcsfsdfv', 2, 7, 0, NULL),
+(12, 'AA000AA', 'dcsfsdfv', 1, 7, 0, NULL),
+(13, 'AA000AA', 'sdfv', 3, 9, 0, NULL),
+(14, 'cc777cc', 'Ferrari', 2, 7, 0, NULL),
+(15, 'cc777cc', 'lamborghini', 3, 7, 1, 8);
+
+--
+-- Indici per le tabelle scaricate
+--
+
+--
+-- Indici per le tabelle `ACCESSI_UTENTE`
+--
+ALTER TABLE `ACCESSI_UTENTE`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `FK_ACCESSO_UTENTE` (`ID_UTENTE`);
+
+--
+-- Indici per le tabelle `ACCESSI_VEICOLO`
+--
+ALTER TABLE `ACCESSI_VEICOLO`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `FK_ACCESSO_VEICOLO` (`ID_VEICOLO`);
+
+--
+-- Indici per le tabelle `AUTORIZZAZIONI`
+--
+ALTER TABLE `AUTORIZZAZIONI`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `FK_AUTORIZZAZIONE_VEICOLO` (`ID_VEICOLO`),
+  ADD KEY `FK_AUTORIZZAZIONE_RICHIESTA` (`STATO_RICHIESTA`),
+  ADD KEY `FK_AUTORIZZAZIONE_ADMIN` (`ID_ADMIN`);
+
+--
+-- Indici per le tabelle `RUOLI`
+--
+ALTER TABLE `RUOLI`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `TIPI_VEICOLO`
+--
+ALTER TABLE `TIPI_VEICOLO`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `UTENTI`
+--
+ALTER TABLE `UTENTI`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `FK_RUOLO_UTENTE` (`ID_RUOLO`);
+
+--
+-- Indici per le tabelle `VEICOLI`
+--
+ALTER TABLE `VEICOLI`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `FK_VEICOLO_UTENTE` (`ID_UTENTE`),
+  ADD KEY `FK_VEICOLO_TIPO` (`ID_TIPO`),
+  ADD KEY `FK_VEICOLO_ADMIN` (`ID_ADMIN`);
+
+--
+-- AUTO_INCREMENT per le tabelle scaricate
+--
+
+--
+-- AUTO_INCREMENT per la tabella `ACCESSI_UTENTE`
+--
+ALTER TABLE `ACCESSI_UTENTE`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT per la tabella `ACCESSI_VEICOLO`
+--
+ALTER TABLE `ACCESSI_VEICOLO`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT per la tabella `AUTORIZZAZIONI`
+--
+ALTER TABLE `AUTORIZZAZIONI`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT per la tabella `RUOLI`
+--
+ALTER TABLE `RUOLI`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT per la tabella `TIPI_VEICOLO`
+--
+ALTER TABLE `TIPI_VEICOLO`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT per la tabella `UTENTI`
+--
+ALTER TABLE `UTENTI`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT per la tabella `VEICOLI`
+--
+ALTER TABLE `VEICOLI`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- Limiti per le tabelle scaricate
+--
+
+--
+-- Limiti per la tabella `ACCESSI_UTENTE`
+--
+ALTER TABLE `ACCESSI_UTENTE`
+  ADD CONSTRAINT `FK_ACCESSO_UTENTE` FOREIGN KEY (`ID_UTENTE`) REFERENCES `UTENTI` (`ID`);
+
+--
+-- Limiti per la tabella `ACCESSI_VEICOLO`
+--
+ALTER TABLE `ACCESSI_VEICOLO`
+  ADD CONSTRAINT `FK_ACCESSO_VEICOLO` FOREIGN KEY (`ID_VEICOLO`) REFERENCES `VEICOLI` (`ID`);
+
+--
+-- Limiti per la tabella `AUTORIZZAZIONI`
+--
+ALTER TABLE `AUTORIZZAZIONI`
+  ADD CONSTRAINT `FK_AUTORIZZAZIONE_ADMIN` FOREIGN KEY (`ID_ADMIN`) REFERENCES `UTENTI` (`ID`),
+  ADD CONSTRAINT `FK_AUTORIZZAZIONE_VEICOLO` FOREIGN KEY (`ID_VEICOLO`) REFERENCES `VEICOLI` (`ID`);
+
+--
+-- Limiti per la tabella `UTENTI`
+--
+ALTER TABLE `UTENTI`
+  ADD CONSTRAINT `FK_RUOLO_UTENTE` FOREIGN KEY (`ID_RUOLO`) REFERENCES `RUOLI` (`ID`);
+
+--
+-- Limiti per la tabella `VEICOLI`
+--
+ALTER TABLE `VEICOLI`
+  ADD CONSTRAINT `FK_VEICOLO_ADMIN` FOREIGN KEY (`ID_ADMIN`) REFERENCES `UTENTI` (`ID`),
+  ADD CONSTRAINT `FK_VEICOLO_TIPO` FOREIGN KEY (`ID_TIPO`) REFERENCES `TIPI_VEICOLO` (`ID`),
+  ADD CONSTRAINT `FK_VEICOLO_UTENTE` FOREIGN KEY (`ID_UTENTE`) REFERENCES `UTENTI` (`ID`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

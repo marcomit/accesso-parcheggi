@@ -86,7 +86,7 @@ Components::heading((isset($id_richiesta) ? "Aggiorna" : "Inserisci") . " richie
                         <option value="">Seleziona un veicolo</option>
                         <?php $veicoli = Database::query("SELECT VEICOLI.ID, VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO FROM VEICOLI
                         INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO
-                        WHERE VEICOLI.ID_UTENTE = " . $_SESSION['user']['ID']);
+                        WHERE VEICOLI.ID_ADMIN IS NOT NULL AND VEICOLI.ID_UTENTE = " . $_SESSION['user']['ID']);
                         while($veicolo = $veicoli->fetch_assoc()): ?>
                             <option value="<?= $veicolo['ID'] ?>"
                                 <?= isset($id_richiesta) && $autorizzazione['VEICOLO'] === $veicolo['ID'] ? 'selected' : '' ?>>

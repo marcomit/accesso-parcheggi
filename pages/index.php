@@ -11,9 +11,9 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
 <div class="row">
     <?php
     Components::card("Posti liberi", $POSTI_TOTALI - $auto_presenti, "fa-car");
-    Components::card("Autorizzazioni attive", $autorizzazioni_attive, "fa-dollar-sign", "success");
-    Components::card("Riempimento parcheggio", $auto_presenti . "%", "fa-clipboard-list", "info", intval($auto_presenti * 100 / $POSTI_TOTALI));
-    Components::card("Autorizzazioni pendenti", $richieste_pendenti, "fa-comments", "warning");
+    Components::card("Autorizzazioni attive", $autorizzazioni_attive, "fa-video", "success");
+    Components::card("Riempimento parcheggio", $auto_presenti . "%", "fa-bars-progress", "info", intval($auto_presenti * 100 / $POSTI_TOTALI));
+    Components::card("Autorizzazioni pendenti", $richieste_pendenti, "fa-inbox", "warning");
      ?>
 </div>
 

@@ -1,15 +1,16 @@
 
 <?php
-$query = "SELECT AUTORIZZAZIONI.ID, AUTORIZZAZIONI.INIZIO, AUTORIZZAZIONI.FINE, AUTORIZZAZIONI.STATO_RICHIESTA, VEICOLI.TARGA, VEICOLI.MODELLO, TIPI_VEICOLO.DESCRIZIONE AS TIPO, UTENTI.NOME, UTENTI.COGNOME, RUOLI.DESCRIZIONE AS RUOLO
-FROM AUTORIZZAZIONI
-INNER JOIN VEICOLI ON AUTORIZZAZIONI.ID_VEICOLO = VEICOLI.ID
-INNER JOIN TIPI_VEICOLO ON TIPI_VEICOLO.ID = VEICOLI.ID_TIPO
-INNER JOIN UTENTI ON UTENTI.ID = VEICOLI.ID_UTENTE
-INNER JOIN RUOLI ON RUOLI.ID = UTENTI.ID_RUOLO
-WHERE AUTORIZZAZIONI.STATO_RICHIESTA = 1";
+$query = "SELECT a.ID, a.INIZIO, a.FINE, a.STATO_RICHIESTA, v.TARGA, v.MODELLO, tv.DESCRIZIONE AS TIPO, u.NOME AS NOME, u.COGNOME AS COGNOME, u2.NOME AS ADMIN_NOME, u2.COGNOME AS ADMIN_COGNOME, r.DESCRIZIONE AS RUOLO
+FROM AUTORIZZAZIONI a
+INNER JOIN VEICOLI v ON a.ID_VEICOLO = v.ID
+INNER JOIN TIPI_VEICOLO tv ON tv.ID = v.ID_TIPO
+INNER JOIN UTENTI u ON u.ID = v.ID_UTENTE
+INNER JOIN UTENTI u2 ON u2.ID = a.ID_ADMIN
+INNER JOIN RUOLI r ON r.ID = u.ID_RUOLO
+WHERE a.STATO_RICHIESTA = 1";
 
 if($_SESSION['user']['RUOLO'] !== "ADMIN"){
-    $query .= " AND UTENTI.ID = " . $_SESSION['user']['ID'];
+    $query .= " AND u.ID = " . $_SESSION['user']['ID'];
 }
 $autorizzazioni = Database::query($query);
 
@@ -34,6 +35,7 @@ Components::heading("Autorizzazioni", "fa fa-retweet", "Aggiorna", "", "btn-outl
                             <th>Targa</th>
                             <th>Modello</th>
                             <th>Tipo</th>
+                            <th>Autorizzato da</th>
                         </tr>
                     </thead>
                     </tfoot>
@@ -48,6 +50,7 @@ Components::heading("Autorizzazioni", "fa fa-retweet", "Aggiorna", "", "btn-outl
                                 <td><?= $autorizzazione['TARGA'] ?></td>
                                 <td><?= $autorizzazione['MODELLO'] ?></td>
                                 <td><?= $autorizzazione['TIPO'] ?></td>
+                                <td><?= $autorizzazione['ADMIN_NOME'] . " " . $autorizzazione['ADMIN_COGNOME'] ?></td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>

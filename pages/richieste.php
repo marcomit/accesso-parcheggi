@@ -24,18 +24,10 @@ if ($_SESSION['user']['RUOLO'] !== "ADMIN") {
     $query .= " AND UTENTI.ID = " . intval($_SESSION['user']['ID']);
 }
 $autorizzazioni = Database::query($query);
+
+Components::heading("Richieste", "fas fa-plus text-white-50 fa-sm", "Invia richiesta", "index.php?page_id=5", "btn btn-primary");
 ?>
 <script>showToast("Richieste", "Inserimento avvenuto")</script>
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Richieste</h1>
-    <div>
-        <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-retweet fa-sm"></i></a>
-        <a href="index.php?page_id=9" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-plus fa-sm text-white-50"></i> Invia richiesta</a>
-    </div>
-</div>
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -58,7 +50,7 @@ $autorizzazioni = Database::query($query);
                     <?php while($autorizzazione = $autorizzazioni->fetch_assoc()): ?>
                         <tr data-autorizzazione="<?= $autorizzazione['ID'] ?>">
                             <td class="text-primary" data-toggle="modal" data-target="#requestStatus">
-                                <a href="index.php?page_id=9&id_richiesta=<?= $autorizzazione['ID'] ?>">Modifica</a>
+                                <a href="index.php?page_id=5&id_richiesta=<?= $autorizzazione['ID'] ?>">Modifica</a>
                             </td>
                             <?php if($_SESSION['user']['RUOLO'] === "ADMIN"):?> <td><?= $autorizzazione['NOME'] . " - " . $autorizzazione['COGNOME'] ?></td> <?php endif ?>
                             <td><?= $autorizzazione['TARGA'] . ' - ' . $autorizzazione['MODELLO'] ?></td>

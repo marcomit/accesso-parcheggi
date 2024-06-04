@@ -1,5 +1,4 @@
 <?php
-include('../database.php');
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $nome = $_POST['Nome'];
     $cognome = $_POST['Cognome'];

@@ -10,11 +10,8 @@ if($_SESSION['user']['RUOLO'] === "ADMIN")
     }
     $utenti = Database::query("SELECT RUOLI.DESCRIZIONE AS Ruolo, UTENTI.ID AS ID, UTENTI.NOME AS Nome, UTENTI.COGNOME AS Cognome, UTENTI.EMAIL AS Email, UTENTI.CODICE_FISCALE AS CF, UTENTI.TELEFONO AS Telefono FROM UTENTI JOIN RUOLI ON UTENTI.ID_RUOLO = RUOLI.ID");
 }
-else{
-    http_response_code(404);
-    include('404.html');
-    exit;
-}
+
+if($_SESSION['user']['RUOLO'] === "ADMIN"):
 Components::heading("", "fas fa-plus", "Aggiungi Utente", "index.php?page_id=10", "btn btn-primary") ?>
 <div class="modal fade" id="Modify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -127,3 +124,4 @@ Components::heading("", "fas fa-plus", "Aggiungi Utente", "index.php?page_id=10"
 
     }
 </script>
+<?php else: Components::not_found(); endif; ?>

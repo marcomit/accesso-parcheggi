@@ -21,7 +21,7 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
 <?php Components::heading("Grafici di oggi") ?>
 
 <div class="row">
-    <div class="col-xl-8 col-lg-7">
+    <div class="col-xl-7 col-lg-7">
         <div class="card shadow mb-4">
             <div
                 class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -45,11 +45,11 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
                 <div class="chart-area">
                     <canvas id="todayBarChart"></canvas>
                     <?= Chart::bar("todayBarChart",
-                    "SELECT HOUR(USCITA) AS H, COUNT(*) AS C
+                    "SELECT HOUR(ENTRATA) AS H, COUNT(*) AS C
                     FROM ACCESSI_VEICOLO
-                    WHERE USCITA IS NOT NULL AND DAY(USCITA) = DAY(NOW())
-                    GROUP BY HOUR(USCITA)
-                    ORDER BY HOUR(USCITA)", "H", "C", "Accessi",
+                    WHERE DAY(ENTRATA) = DAY(NOW())
+                    GROUP BY HOUR(ENTRATA)
+                    ORDER BY HOUR(ENTRATA)", "H", "C", "Accessi",
                     function ($key){
                         if($key < 9){
                             return "0" . $key . ":00";
@@ -61,8 +61,7 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
         </div>
     </div>
 
-    <!-- Pie Chart -->
-    <div class="col-xl-4 col-lg-5">
+    <div class="col-xl-5 col-lg-5">
         <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div
@@ -120,7 +119,6 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
 <?php Components::heading("Grafici generali") ?>
 
 <div class="row">
-
     <div class="col-xl-4 col-lg-5">
         <div class="card shadow mb-4">
             <div
@@ -170,7 +168,6 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
             </div>
         </div>
     </div>
-
     <div class="col-xl-8 col-lg-7">
         <div class="card shadow mb-4">
             <div
@@ -206,6 +203,191 @@ Components::heading("Dashboard", "fas fa-retweet", "Aggiorna", "", "btn btn-outl
                         }
                         return $key . ":00";
                     }) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5"></div>
+<?php Components::heading("Posti parcheggio") ?>
+
+<div class="row">
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Accessi per ora</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="parkingAreaChart"></canvas>
+                    <?= Chart::area("parkingAreaChart", 
+                    "SELECT HOUR(USCITA) AS H, COUNT(*) AS C
+                    FROM ACCESSI_VEICOLO
+                    WHERE USCITA IS NOT NULL
+                    GROUP BY HOUR(USCITA)
+                    ORDER BY HOUR(USCITA)", "H", "C", "Accessi",
+                    function ($key){
+                        if($key < 9){
+                            return "0" . $key . ":00";
+                        }
+                        return $key . ":00";
+                    }) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Accessi per ruolo</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-pie pt-4 pb-2">
+                    <canvas id="parkingPieChart"></canvas>
+                    <?php Chart::pie("parkingPieChart",
+                    "SELECT RUOLI.DESCRIZIONE AS RUOLO, COUNT(ACCESSI_VEICOLO.ID) AS C
+                    FROM RUOLI
+                    LEFT JOIN UTENTI ON UTENTI.ID_RUOLO = RUOLI.ID
+                    LEFT JOIN VEICOLI ON VEICOLI.ID_UTENTE = UTENTI.ID
+                    LEFT JOIN ACCESSI_VEICOLO ON ACCESSI_VEICOLO.ID_VEICOLO = VEICOLI.ID
+                    GROUP BY RUOLI.ID, RUOLI.DESCRIZIONE
+                    ORDER BY RUOLI.DESCRIZIONE", "RUOLO", "C") ?>
+                </div>
+                <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-primary"></i> Studenti
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-success"></i> Docenti
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-info"></i> Personale
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-danger"></i> Altro
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5"></div>
+<?php Components::heading("Autorizzazioni") ?>
+
+<div class="row">
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Autorizzazioni attive in base ai ruoli</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-bar">
+                    <canvas id="authorizationBarChart"></canvas>
+                    <?= Chart::bar("authorizationBarChart", 
+                    "SELECT RUOLI.DESCRIZIONE AS RUOLO, COUNT(AUTORIZZAZIONI.ID) AS C
+                    FROM RUOLI
+                    LEFT JOIN UTENTI ON UTENTI.ID_RUOLO = RUOLI.ID
+                    LEFT JOIN VEICOLI ON VEICOLI.ID_UTENTE = UTENTI.ID
+                    LEFT JOIN AUTORIZZAZIONI ON AUTORIZZAZIONI.ID_VEICOLO = VEICOLI.ID 
+                    WHERE AUTORIZZAZIONI.STATO_RICHIESTA = 1 AND NOW() BETWEEN AUTORIZZAZIONI.INIZIO AND AUTORIZZAZIONI.FINE
+                    GROUP BY RUOLI.ID, RUOLI.DESCRIZIONE
+                    ORDER BY RUOLI.DESCRIZIONE", "RUOLO", "C", "Autorizzazioni") ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Accessi per ruolo</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-pie pt-4 pb-2">
+                    <canvas id="authorizationPieChart"></canvas>
+                    <?php Chart::pie("authorizationPieChart",
+                    "SELECT RUOLI.DESCRIZIONE AS RUOLO, COUNT(ACCESSI_VEICOLO.ID) AS C
+                    FROM RUOLI
+                    LEFT JOIN UTENTI ON UTENTI.ID_RUOLO = RUOLI.ID
+                    LEFT JOIN VEICOLI ON VEICOLI.ID_UTENTE = UTENTI.ID
+                    LEFT JOIN ACCESSI_VEICOLO ON ACCESSI_VEICOLO.ID_VEICOLO = VEICOLI.ID
+                    GROUP BY RUOLI.ID, RUOLI.DESCRIZIONE
+                    ORDER BY RUOLI.DESCRIZIONE", "RUOLO", "C") ?>
+                </div>
+                <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-primary"></i> Studenti
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-success"></i> Docenti
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-info"></i> Personale
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-danger"></i> Altro
+                    </span>
                 </div>
             </div>
         </div>

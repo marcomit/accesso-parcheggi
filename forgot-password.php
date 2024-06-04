@@ -9,13 +9,14 @@ if(isset($_POST['email'])){
 		$errore=1;
 	}else{
         
-		$result= Database::query("SELECT UTENTI.ID AS Id, UTENTI.PASSWORD AS Password FROM UTENTI WHERE email='".$_POST['email']."' limit 1");
+		$result= Database::query("SELECT UTENTI.ID AS Id, UTENTI.PASSWORD AS Password FROM UTENTI WHERE UTENTI.EMAIL='".$_POST['email']."' limit 1");
 		if($result->num_rows === 1){
             $row = $result -> fetch_assoc();
 			//l’hash ci servirà per recuperare i dati utente e confermare la richiesta
 			//la password nel database si presume criptata, con md5 o altro algoritmo
 			//al posto di questi due dati, se ne possono usare altri legati all’utente, purché univoci
-			$hash=hash('sha256', $row['Password'].$row['Id']);
+            $stringa = $row['Id'].$row['Password'];
+			$hash=hash('sha256', $stringa);
 		}else
 			$errore=1;
 		

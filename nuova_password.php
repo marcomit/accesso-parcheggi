@@ -17,28 +17,21 @@ function random($lunghezza=12){
 if(isset($_GET['hash'])){
 	
 	$hash=$_GET['hash'];
-	$id=substr($hash, 32);
-	$password_old=substr($hash, 0, 32);
-	Database::connect();
+	
 
 	$password=random(8); //nuova password di 8 caratteri
-	
-	//controllo che i valori dell’hash corrispondano ai valori salvati nel database
 	$result=Database::query("SELECT UTENTI.ID AS ID, UTENTI.PASSWORD FROM UTENTI");
-	
 	if($result->num_rows === 1){ 
 	
 		while($utente = $result->fetch_assoc()){
-			$hash_utente = $utente['password'].$utente['id'];
+			$hash_utente = hash('sha256', $utente['password'].$utente['id']);
 			if($hash_utente === $hash){
-				$db2 = new Database();
-				$updateQuery = $db2 -> execute_query("UPDATE UTENTI SET UTENTI.PASSWORD='".hash('sha256', $password)."' WHERE UTENTI.ID=".$$utente['id']." and UTENTI.PASSWORD='".$utente['password']."'");
+				$updateQuery = Database::query("UPDATE UTENTI SET UTENTI.PASSWORD='".hash('sha256', $password)."' WHERE UTENTI.ID=".$$utente['id']." and UTENTI.PASSWORD='".$utente['password']."'");
 				break;
 			}
 			
 		}
 		
-		//salvo la nuova password al posto della vecchia (in md5)
 		$header= "From: 5bia.it <noreply@5bia.it>\n";
 		$header .= "Content-Type: text/html; charset=\"iso-8859-1\"\n";
 		$header .= "Content-Transfer-Encoding: 7bit\n\n";

@@ -8,16 +8,13 @@ if(isset($_POST['email'])){
 	
 	if($_POST['email']==""){
 		$errore=1;
-	}else{
+	}
+	else{
         
 		$result= Database::query("SELECT UTENTI.ID AS Id, UTENTI.PASSWORD AS Password FROM UTENTI WHERE UTENTI.EMAIL='".$_POST['email']."' limit 1");
 		if($result->num_rows === 1){
             $row = $result -> fetch_assoc();
-			//l’hash ci servirà per recuperare i dati utente e confermare la richiesta
-			//la password nel database si presume criptata, con md5 o altro algoritmo
-			//al posto di questi due dati, se ne possono usare altri legati all’utente, purché univoci
-            $stringa = $row['Id'].$row['Password'];
-			$hash=hash('sha256', $stringa);
+			$hash=hash('sha256', $row['Password'].$row['Id']);
 		}else
 			$errore=1;
 		
@@ -37,15 +34,15 @@ if(isset($_POST['email'])){
 		$mess_invio.="
 		Clicca sul <a href=\"http://www.5bia.it/nuova_password.php?hash=".$hash."\">link</a> per confermare la nuova password.<br />
 		Se il link non è visibile, copia la riga qui sotto e incollala sul tuo browser: <br />
-		http://www.5bia.it/nuova_password.php?hash=".$hash."
+		https://www.5bia.it/nuova_password.php?hash=".$hash."
 		";
 		
 		$mess_invio.='</body><html>';
 		
 		//invio email
-		if(@mail($_POST['email'], $subject, $mess_invio, $header)){
-			unset($_POST); //elimino le variabili post, in modo che non appaiano nel form
-		}
+		if(!mail($_POST['email'], $subject, $mess_invio, $header)){
+		    echo("<script>alert('errore invio mail'</script>");
+        }
 	
 	}
 
@@ -83,7 +80,7 @@ if(isset($_POST['email'])){
         <!-- Outer Row -->
         <div class="row justify-content-center">
     
-                <div class="p-4">
+                <div class="p-3"<>
                     <div class="card o-hidden border-0 shadow-lg my-4 p-5 w-20">
                         <div class="card-body p-0">
                             <!-- Nested Row within Card Body -->

@@ -1,25 +1,44 @@
 <?php
-include("database.php");
-Database::connect();
+include('database.php');
+if(isset($_POST['hash']) && isset($_POST['password'])){
+	$hash=$_POST['hash'];
+	$password=$_POST['password'];
+	Database::connect();
+	$result = Database::query("SELECT UTENTI.ID AS id, UTENTI.PASSWORD AS password, UTENTI.EMAIL AS email FROM UTENTI");
 
-//il controllo del get evita errori di pagina
-
-if(isset($_POST['password']) & isset($_POST['hash'])){
-	$hash= $_POST['hash'];
-	$password = $_POST['password'];
-	$result=Database::query("SELECT UTENTI.ID AS ID, UTENTI.PASSWORD AS password FROM UTENTI");
-	if($result->num_rows === 1){ 
 		while($utente = $result->fetch_assoc()){
-			$hash_utente = hash('sha256', $utente['password'].$utente['ID']);
+			$hash_utente = hash('sha256',$utente['password'].$utente['id']);
+			
 			if($hash_utente === $hash){
-				$updateQuery = Database::query("UPDATE UTENTI SET UTENTI .PASSWORD='".hash('sha256', $password)."' WHERE UTENTI.ID=".$utente['ID']." and UTENTI.PASSWORD='".$utente['password']."'");
-				break;
+				$updateQuery = Database::query("UPDATE UTENTI SET UTENTI.PASSWORD='".hash('sha256', $password)."' WHERE UTENTI.ID='".$utente['id']."' and UTENTI.PASSWORD='".$utente['password']."'");
+        		$header= "From: 5bia.it <noreply@5bia.it>\n";
+        		$header .= "Content-Type: text/html; charset=\"iso-8859-1\"\n";
+        		$header .= "Content-Transfer-Encoding: 7bit\n\n";
+        						
+        		$subject= "5bia.it - Nuova password utente";
+        		
+        		$mess_invio="<html><body>";
+        		
+        		$mess_invio.="
+        		Password ripristinata! Se il link non è visibile, copia la riga qui sotto e incollala sul tuo browser: <br />
+        		https://www.5bia.it/login.php"
+        		;
+        		
+        		$mess_invio.='</body><html>';
+        		
+        		//invio email
+        		if(mail($utente['email'], $subject, $mess_invio, $header)){
+
+                }
+        		else{
+        		   echo("errore invio mail");
+        		}
+        		break;
 			}
 		}
 	}
-} ?>
 
-<?php if(isset($_GET['hash'])): ?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,7 +65,49 @@ if(isset($_POST['password']) & isset($_POST['hash'])){
 <body class="bg-gradient-primary">
 
     <div class="container">
+<?php if(!isset($_POST['password'])): ?>
         <!-- Outer Row -->
+        <div class="row justify-content-center">
+    
+                <div class="p-3">
+                    <div class="card o-hidden border-0 shadow-lg my-4 p-5 w-20">
+                        <div class="card-body p-0">
+                            <!-- Nested Row within Card Body -->
+                            <div class="my-3 text-center">
+                            <img src="img/logo.png" alt="Logo" class="" style="max-width: 120px;">
+                            </div>
+                            <div class="row">
+                                    <div class="my-2 mx-auto">
+                                        <h1 class="h4 text-gray-900 mb-2 text-center">Password Dimenticata?</h1>
+                                        <p class="mb-4 text-center">Inserisci la nuova password</p>
+                                    <form class="user" action="" method="post">
+                                        <div class="form-group">
+                                            <input type="password" name="password" class="form-control form-control-user"
+                                                id="exampleInputPassword" aria-describedby="passwordHelp"
+                                                placeholder="Password...">
+                                        </div>
+                                        <input type="hidden" name="hash" id="hash" value="<?php echo ($_GET['hash'])?>">
+                                        <input class="btn btn-primary btn-rounded" type="submit" value="Ripristina Password">
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="register.php">Crea un account!</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="login.php">Hai già un account? Accedi</a>
+                                    </div>
+                                </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <?php else: ?>
         <div class="row justify-content-center">
     
                 <div class="p-4">
@@ -58,20 +119,15 @@ if(isset($_POST['password']) & isset($_POST['hash'])){
                             </div>
                             <div class="row">
                                     <div class="my-2 mx-auto">
-                                        <h1 class="h4 text-gray-900 mb-2 text-center">Password Dimenticata?</h1>
-                                        <p class="mb-4 text-center">Inserisci la nuova password
-                                            <br></p>
-                                    
-                                    <form class="user" action="" method="post">
-                                        <div class="form-group">
-                                            <input type="password" name="password" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Inserisci password...">
-                                        </div>
-                                        <input type="hidden" value="<?$_GET['hash']?>">
-                                        <input class="btn btn-primary btn-rounded" type="submit" value="Ripristina Password">
-                                    </form>
+                                        <h1 class="h4 text-gray-900 mb-2 text-center">Ripristino password</h1>
+                                        <p class="mb-4 text-center">Password ripristinata</p>
                                     <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="register.php">Crea un account!</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="login.php">Hai già un account? Accedi</a>
+                                    </div>
                                 </div>
                             
                         </div>
@@ -79,8 +135,8 @@ if(isset($_POST['password']) & isset($_POST['hash'])){
                 </div>
 
             </div>
-		</div>
-	</div>	
+
+        </div>
 
     <?php endif; ?>
 

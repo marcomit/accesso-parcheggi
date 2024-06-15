@@ -3,6 +3,7 @@
 if(isset($_POST['email'])){
 
     include('database.php');
+    Database::connect();
 	$errore=0; //variabile di controllo errori (se rimane a 0 non ci sono errori)
 	
 	if($_POST['email']==""){

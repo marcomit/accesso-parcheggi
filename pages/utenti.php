@@ -85,9 +85,10 @@ Components::heading("", "fas fa-plus", "Aggiungi Utente", "index.php?page_id=2",
 <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm p-2" data-toggle="modal" data-target="#Delete">Elimina utente</a>
 </div>
 </h1>
-
-<table class="table table-bordered" id="dataTable">
-    <thead>
+<div class="card-body">
+    <div class="table-responsive">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+         <thead>
         <tr>
             <th data-sort="Ruolo">Ruolo</th>
             <th data-sort="Nome">Nome</th>
@@ -111,6 +112,8 @@ Components::heading("", "fas fa-plus", "Aggiungi Utente", "index.php?page_id=2",
         <?php endwhile; ?>
     </tbody>
 </table>
+</div>
+</div>
 </div>
 <?php endif?> 
 <script>
